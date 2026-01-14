@@ -7,7 +7,8 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: #000;
+      background: #000 url('https://media.tenor.com/Fur3YBnb8AQAAAAM/lil-durk-we-eat-nuts.gif') no-repeat center center fixed; /* Lil Durk Chiraq GIF - istersen değiştir */
+      background-size: cover;
       color: #ff0044;
       font-family: Arial, Helvetica, sans-serif;
       overflow: hidden;
@@ -16,6 +17,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
+      position: relative;
+    }
+    body::before { /* Loş katman: GIF'i gangster vibe'a uygun karart */
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.65); /* daha fazla loş istersen 0.7-0.8 yap */
+      z-index: -2;
     }
     header {
       width: 100%;
@@ -25,17 +34,19 @@
       font-weight: bold;
       text-shadow: 0 0 20px #ff0044, 0 0 40px #ff0044;
       letter-spacing: 8px;
+      z-index: 5;
     }
     .container {
       width: 100%;
       height: 35vh;
       position: relative;
       margin: 20px 0;
+      z-index: 5;
     }
     #snakeGame {
       width: 100%;
       height: 100%;
-      background: #111;
+      background: rgba(17,17,17,0.75); /* Yarı şeffaf ki GIF hafif görünsün */
       border: 4px solid #ff0044;
       box-shadow: 0 0 30px #ff0044;
     }
@@ -52,6 +63,16 @@
       z-index: 10;
       letter-spacing: 10px;
     }
+    #tokenText {
+      font-size: 0.7rem; /* çok küçük */
+      color: #00ff9d;
+      text-shadow: 0 0 8px #00ff9d;
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: 1.5px;
+      opacity: 0.85;
+      z-index: 5;
+    }
     .btn {
       margin-top: 30px;
       padding: 20px 60px;
@@ -63,6 +84,7 @@
       cursor: pointer;
       box-shadow: 0 0 20px #ff0044;
       transition: all 0.3s;
+      z-index: 5;
     }
     .btn:hover {
       transform: scale(1.1);
@@ -75,9 +97,17 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      position: relative;
+      z-index: 5;
     }
     #gamePage { display: none; }
-    #bgMusic { display: none; } /* Gizli müzik */
+    #ytPlayerContainer {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0;
+    }
   </style>
 </head>
 <body>
@@ -92,40 +122,56 @@
       <canvas id="snakeGame"></canvas>
       <div id="titleOverlay">Pıttıkcxn</div>
     </div>
-    <!-- Let It Happen - Tame Impala (senin linkin, loop + preload) -->
-    <audio id="bgMusic" loop preload="auto">
-      <source src="https://audio.com/spruuuud/audio/tame-impala-let-it-happen-kissvkcom" type="audio/mpeg">
-      Tarayıcın müzik desteklemiyo lan.
-    </audio>
+    <div id="tokenText">best dou tokencxn</div> <!-- Küçük yazı yılan altına -->
+    <!-- Gizli YouTube player for Let It Happen -->
+    <div id="ytPlayerContainer">
+      <div id="ytplayer"></div>
+    </div>
   </div>
 
+  <script src="https://www.youtube.com/iframe_api"></script>
+
   <script>
-    let animationId; // animation'ı cancel için
+    let ytPlayer;
+    let animationId;
+
+    function onYouTubeIframeAPIReady() {
+      ytPlayer = new YT.Player('ytplayer', {
+        height: '1',
+        width: '1',
+        videoId: 'NMRhx71bGo4',
+        playerVars: {
+          'autoplay': 0,
+          'loop': 1,
+          'playlist': 'NMRhx71bGo4',
+          'controls': 0,
+          'showinfo': 0,
+          'rel': 0,
+          'mute': 1
+        },
+        events: { 'onReady': onPlayerReady }
+      });
+    }
+
+    function onPlayerReady(event) {}
 
     function startGame() {
-      console.log("Giriş basıldı, game başlıyo amk"); // debug
-      const mainPage = document.getElementById('mainPage');
-      const gamePage = document.getElementById('gamePage');
-      if (!mainPage || !gamePage) { console.error("Div'ler yok!"); return; }
+      document.getElementById('mainPage').style.display = 'none';
+      document.getElementById('gamePage').style.display = 'flex';
 
-      mainPage.style.display = 'none';
-      gamePage.style.display = 'flex';
-
-      // Müzik başlat (muted başla, sonra ses aç - autoplay policy)
-      const music = document.getElementById('bgMusic');
-      music.volume = 0.4; // düşük psychedelic vibe
-      music.muted = false;
-      music.play().catch(e => console.log("Müzik error:", e)); // catch blokla
+      if (ytPlayer && ytPlayer.playVideo) {
+        ytPlayer.unMute();
+        ytPlayer.playVideo();
+        ytPlayer.setVolume(35); // düşük tut
+      }
 
       initSnakeGame();
     }
 
     function initSnakeGame() {
       const canvas = document.getElementById('snakeGame');
-      if (!canvas) { console.error("Canvas yok!"); return; }
       const ctx = canvas.getContext('2d');
 
-      // Canvas'ı tam boyut yap (responsive)
       function resizeCanvas() {
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
@@ -135,25 +181,11 @@
 
       const grid = 20;
       let count = 0;
-      let score = 0; // skor ekle istersen UI'ye koyarız
 
-      let snake = {
-        x: 160,
-        y: 160,
-        dx: grid,
-        dy: 0,
-        cells: [],
-        maxCells: 4
-      };
+      let snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
+      let apple = { x: 320, y: 320 };
 
-      let apple = {
-        x: 320,
-        y: 320
-      };
-
-      function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-      }
+      function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
 
       function loop() {
         animationId = requestAnimationFrame(loop);
@@ -166,7 +198,6 @@
         snake.x += snake.dx;
         snake.y += snake.dy;
 
-        // Duvar wrap (sonsuz arena)
         if (snake.x >= canvas.width) snake.x = 0;
         if (snake.x < 0) snake.x = canvas.width - grid;
         if (snake.y >= canvas.height) snake.y = 0;
@@ -175,40 +206,32 @@
         snake.cells.unshift({x: snake.x, y: snake.y});
         if (snake.cells.length > snake.maxCells) snake.cells.pop();
 
-        // Elma yeme
         if (snake.x === apple.x && snake.y === apple.y) {
           snake.maxCells++;
           apple.x = getRandomInt(0, canvas.width / grid) * grid;
           apple.y = getRandomInt(0, canvas.height / grid) * grid;
         }
 
-        // Elma çiz
         ctx.fillStyle = '#ff0044';
         ctx.fillRect(apple.x, apple.y, grid-2, grid-2);
 
-        // Yılan çiz (baş mavi, gövde yeşil)
         ctx.fillStyle = '#00ff9d';
         snake.cells.forEach((cell, index) => {
           ctx.fillRect(cell.x, cell.y, grid-2, grid-2);
           if (index === 0) ctx.fillStyle = '#00ccff';
-          else ctx.fillStyle = '#00ff9d';
         });
 
-        // Kendine çarpma = reset
         for (let i = 1; i < snake.cells.length; i++) {
           if (snake.x === snake.cells[i].x && snake.y === snake.cells[i].y) {
             snake.x = 160; snake.y = 160;
             snake.cells = [];
             snake.maxCells = 4;
             snake.dx = grid; snake.dy = 0;
-            apple.x = getRandomInt(0, canvas.width / grid) * grid;
-            apple.y = getRandomInt(0, canvas.height / grid) * grid;
             break;
           }
         }
       }
 
-      // Ok tuşları (ters yöne dönemez)
       document.addEventListener('keydown', e => {
         if (e.key === 'ArrowLeft' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
         else if (e.key === 'ArrowUp' && snake.dy === 0) { snake.dx = 0; snake.dy = -grid; }
@@ -216,8 +239,7 @@
         else if (e.key === 'ArrowDown' && snake.dy === 0) { snake.dx = 0; snake.dy = grid; }
       });
 
-      loop(); // Başlat
-      console.log("Yılan hazır, ok tuşları bas lan!");
+      loop();
     }
   </script>
 </body>
