@@ -77,72 +77,65 @@
       justify-content: center;
     }
     #gamePage { display: none; }
+    #bgMusic { display: none; } /* Gizli müzik */
   </style>
 </head>
 <body>
 
   <div id="mainPage">
-    <!-- Gizli YouTube player - sadece ses için -->
-<div style="position: absolute; width:1px; height:1px; overflow:hidden;">
-  <iframe 
-    id="ytplayer"
-    width="1" height="1" 
-    src="https://www.youtube.com/embed/NMRhx71bGo4?autoplay=1&loop=1&playlist=NMRhx71bGo4&mute=1&controls=0&showinfo=0&rel=0" 
-    frameborder="0" 
-    allow="autoplay; encrypted-media">
-  </iframe>
-</div>
     <header>Pıttıkcxn</header>
     <button class="btn" onclick="startGame()">GİRİŞ</button>
   </div>
-https://audio.com/spruuuud/audio/tame-impala-let-it-happen-kissvkcom?referrer=grok.com
+
   <div id="gamePage">
     <div class="container">
       <canvas id="snakeGame"></canvas>
       <div id="titleOverlay">Pıttıkcxn</div>
     </div>
+    <!-- Let It Happen - Tame Impala (senin linkin, loop + preload) -->
+    <audio id="bgMusic" loop preload="auto">
+      <source src="https://audio.com/spruuuud/audio/tame-impala-let-it-happen-kissvkcom" type="audio/mpeg">
+      Tarayıcın müzik desteklemiyo lan.
+    </audio>
   </div>
 
   <script>
-    // ... eski snake oyunu kodu aynı ...
+    let animationId; // animation'ı cancel için
 
     function startGame() {
-      document.getElementById('mainPage').style.display = 'none';
-      document.getElementById('gamePage').style.display = 'flex';
-      initSnakeGame();
+      console.log("Giriş basıldı, game başlıyo amk"); // debug
+      const mainPage = document.getElementById('mainPage');
+      const gamePage = document.getElementById('gamePage');
+      if (!mainPage || !gamePage) { console.error("Div'ler yok!"); return; }
 
-      // Şarkıyı başlat (muted başla, sonra kullanıcı etkileşimle ses açılır)
+      mainPage.style.display = 'none';
+      gamePage.style.display = 'flex';
+
+      // Müzik başlat (muted başla, sonra ses aç - autoplay policy)
       const music = document.getElementById('bgMusic');
-      music.play().catch(() => {
-        console.log("Autoplay bloklandı, butonla dene");
-      });
-      music.volume = 0.3; // düşük tut, yılanla boğuşurken rahatsız etmesin
+      music.volume = 0.4; // düşük psychedelic vibe
+      music.muted = false;
+      music.play().catch(e => console.log("Müzik error:", e)); // catch blokla
+
+      initSnakeGame();
     }
-    function startGame() {
-  // ... eski kodlar ...
-
-  // YouTube player'ı bul ve sesi aç (mute'dan çıkar)
-  const player = document.getElementById('ytplayer');
-  if (player) {
-    // YouTube API'siz basit mute toggle (iframe src değiştirerek)
-    player.src = player.src.replace("mute=1", "mute=0"); // sesi aç
-  }
-}
-
-    // İstersen buton ekle ses için (ekstra)
-    // <button onclick="document.getElementById('bgMusic').play(); this.style.display='none'">Şarkıyı Aç lan</button> koyabilirsin container'a
-
 
     function initSnakeGame() {
       const canvas = document.getElementById('snakeGame');
+      if (!canvas) { console.error("Canvas yok!"); return; }
       const ctx = canvas.getContext('2d');
 
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      // Canvas'ı tam boyut yap (responsive)
+      function resizeCanvas() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
 
       const grid = 20;
       let count = 0;
-      let score = 0;
+      let score = 0; // skor ekle istersen UI'ye koyarız
 
       let snake = {
         x: 160,
@@ -163,9 +156,9 @@ https://audio.com/spruuuud/audio/tame-impala-let-it-happen-kissvkcom?referrer=gr
       }
 
       function loop() {
-        requestAnimationFrame(loop);
+        animationId = requestAnimationFrame(loop);
 
-        if (++count < 8) return; // hız ayarı (düşürürsen hızlanır)
+        if (++count < 8) return;
         count = 0;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -173,88 +166,59 @@ https://audio.com/spruuuud/audio/tame-impala-let-it-happen-kissvkcom?referrer=gr
         snake.x += snake.dx;
         snake.y += snake.dy;
 
-        // duvarlardan geçme (klasik snake gibi, istersen game over yap)
+        // Duvar wrap (sonsuz arena)
         if (snake.x >= canvas.width) snake.x = 0;
         if (snake.x < 0) snake.x = canvas.width - grid;
         if (snake.y >= canvas.height) snake.y = 0;
         if (snake.y < 0) snake.y = canvas.height - grid;
 
         snake.cells.unshift({x: snake.x, y: snake.y});
+        if (snake.cells.length > snake.maxCells) snake.cells.pop();
 
-        if (snake.cells.length > snake.maxCells) {
-          snake.cells.pop();
-        }
-
-        // elma yeme
+        // Elma yeme
         if (snake.x === apple.x && snake.y === apple.y) {
           snake.maxCells++;
-          score++;
           apple.x = getRandomInt(0, canvas.width / grid) * grid;
           apple.y = getRandomInt(0, canvas.height / grid) * grid;
         }
 
-        // elmayı çiz
+        // Elma çiz
         ctx.fillStyle = '#ff0044';
         ctx.fillRect(apple.x, apple.y, grid-2, grid-2);
 
-        // yılanı çiz
+        // Yılan çiz (baş mavi, gövde yeşil)
         ctx.fillStyle = '#00ff9d';
         snake.cells.forEach((cell, index) => {
           ctx.fillRect(cell.x, cell.y, grid-2, grid-2);
-          if (index === 0) {
-            ctx.fillStyle = '#00ccff'; // baş farklı renk olsun
-          } else {
-            ctx.fillStyle = '#00ff9d';
-          }
+          if (index === 0) ctx.fillStyle = '#00ccff';
+          else ctx.fillStyle = '#00ff9d';
         });
 
-        // kendine çarpma (game over yerine reset yapıyorum basit olsun)
+        // Kendine çarpma = reset
         for (let i = 1; i < snake.cells.length; i++) {
           if (snake.x === snake.cells[i].x && snake.y === snake.cells[i].y) {
             snake.x = 160; snake.y = 160;
             snake.cells = [];
             snake.maxCells = 4;
             snake.dx = grid; snake.dy = 0;
-            score = 0;
             apple.x = getRandomInt(0, canvas.width / grid) * grid;
             apple.y = getRandomInt(0, canvas.height / grid) * grid;
+            break;
           }
         }
       }
 
+      // Ok tuşları (ters yöne dönemez)
       document.addEventListener('keydown', e => {
-        if (e.key === 'ArrowLeft' && snake.dx === 0) {
-          snake.dx = -grid; snake.dy = 0;
-        } else if (e.key === 'ArrowUp' && snake.dy === 0) {
-          snake.dx = 0; snake.dy = -grid;
-        } else if (e.key === 'ArrowRight' && snake.dx === 0) {
-          snake.dx = grid; snake.dy = 0;
-        } else if (e.key === 'ArrowDown' && snake.dy === 0) {
-          snake.dx = 0; snake.dy = grid;
-        }
+        if (e.key === 'ArrowLeft' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
+        else if (e.key === 'ArrowUp' && snake.dy === 0) { snake.dx = 0; snake.dy = -grid; }
+        else if (e.key === 'ArrowRight' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
+        else if (e.key === 'ArrowDown' && snake.dy === 0) { snake.dx = 0; snake.dy = grid; }
       });
 
-      requestAnimationFrame(loop);
+      loop(); // Başlat
+      console.log("Yılan hazır, ok tuşları bas lan!");
     }
   </script>
 </body>
-  
-  <div id="mainPage">
-    <header>Pıttıkcxn</header>
-    <button class="btn" onclick="startGame()">GİRİŞ</button>
-  </div>
-
-  <div id="gamePage">
-    <div class="container">
-      <canvas id="snakeGame"></canvas>
-      <div id="titleOverlay">Pıttıkcxn</div>
-    </div>
-    <!-- Şarkı ekle: autoplay loop muted başla (tarayıcı politikası için muted), sonra ses aç -->
-    <audio id="bgMusic" loop>
-      <source src="https://www.youtube.com/watch?v=example_yarram_song.mp3" type="audio/mpeg"> <!-- buraya gerçek mp3 link koy -->
-      Tarayıcın audio desteklemiyo amk.
-    </audio>
-  </div>
 </html>
-
-
