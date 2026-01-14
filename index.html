@@ -82,10 +82,20 @@
 <body>
 
   <div id="mainPage">
+    <!-- Gizli YouTube player - sadece ses için -->
+<div style="position: absolute; width:1px; height:1px; overflow:hidden;">
+  <iframe 
+    id="ytplayer"
+    width="1" height="1" 
+    src="https://www.youtube.com/embed/NMRhx71bGo4?autoplay=1&loop=1&playlist=NMRhx71bGo4&mute=1&controls=0&showinfo=0&rel=0" 
+    frameborder="0" 
+    allow="autoplay; encrypted-media">
+  </iframe>
+</div>
     <header>Pıttıkcxn</header>
     <button class="btn" onclick="startGame()">GİRİŞ</button>
   </div>
-
+https://audio.com/spruuuud/audio/tame-impala-let-it-happen-kissvkcom?referrer=grok.com
   <div id="gamePage">
     <div class="container">
       <canvas id="snakeGame"></canvas>
@@ -108,6 +118,16 @@
       });
       music.volume = 0.3; // düşük tut, yılanla boğuşurken rahatsız etmesin
     }
+    function startGame() {
+  // ... eski kodlar ...
+
+  // YouTube player'ı bul ve sesi aç (mute'dan çıkar)
+  const player = document.getElementById('ytplayer');
+  if (player) {
+    // YouTube API'siz basit mute toggle (iframe src değiştirerek)
+    player.src = player.src.replace("mute=1", "mute=0"); // sesi aç
+  }
+}
 
     // İstersen buton ekle ses için (ekstra)
     // <button onclick="document.getElementById('bgMusic').play(); this.style.display='none'">Şarkıyı Aç lan</button> koyabilirsin container'a
@@ -236,4 +256,5 @@
     </audio>
   </div>
 </html>
+
 
