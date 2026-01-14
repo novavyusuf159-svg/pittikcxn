@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pıttıkcxn - FiveM</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #000;
+      color: #ff0044;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    header {
+      width: 100%;
+      text-align: center;
+      padding: 40px 0 20px;
+      font-size: 5rem;
+      font-weight: bold;
+      text-shadow: 0 0 20px #ff0044, 0 0 40px #ff0044;
+      letter-spacing: 8px;
+    }
+    .container {
+      width: 100%;
+      height: 35vh;
+      position: relative;
+      margin: 20px 0;
+    }
+    #snakeGame {
+      width: 100%;
+      height: 100%;
+      background: #111;
+      border: 4px solid #ff0044;
+      box-shadow: 0 0 30px #ff0044;
+    }
+    #titleOverlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 6rem;
+      font-weight: bold;
+      color: rgba(255,0,68,0.6);
+      text-shadow: 0 0 25px #ff0044;
+      pointer-events: none;
+      z-index: 10;
+      letter-spacing: 10px;
+    }
+    .btn {
+      margin-top: 30px;
+      padding: 20px 60px;
+      font-size: 2.5rem;
+      background: #ff0044;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff0044;
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 40px #ff0044;
+    }
+    #mainPage, #gamePage {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #gamePage { display: none; }
+  </style>
+</head>
+<body>
+
+  <div id="mainPage">
+    <header>Pıttıkcxn</header>
+    <button class="btn" onclick="startGame()">GİRİŞ</button>
+  </div>
+
+  <div id="gamePage">
+    <div class="container">
+      <canvas id="snakeGame"></canvas>
+      <div id="titleOverlay">Pıttıkcxn</div>
+    </div>
+  </div>
+
+  <script>
+    function startGame() {
+      document.getElementById('mainPage').style.display = 'none';
+      document.getElementById('gamePage').style.display = 'flex';
+      initSnakeGame();
+    }
+
+    function initSnakeGame() {
+      const canvas = document.getElementById('snakeGame');
+      const ctx = canvas.getContext('2d');
+
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      const grid = 20;
+      let count = 0;
+      let score = 0;
+
+      let snake = {
+        x: 160,
+        y: 160,
+        dx: grid,
+        dy: 0,
+        cells: [],
+        maxCells: 4
+      };
+
+      let apple = {
+        x: 320,
+        y: 320
+      };
+
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+
+      function loop() {
+        requestAnimationFrame(loop);
+
+        if (++count < 8) return; // hız ayarı (düşürürsen hızlanır)
+        count = 0;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        snake.x += snake.dx;
+        snake.y += snake.dy;
+
+        // duvarlardan geçme (klasik snake gibi, istersen game over yap)
+        if (snake.x >= canvas.width) snake.x = 0;
+        if (snake.x < 0) snake.x = canvas.width - grid;
+        if (snake.y >= canvas.height) snake.y = 0;
+        if (snake.y < 0) snake.y = canvas.height - grid;
+
+        snake.cells.unshift({x: snake.x, y: snake.y});
+
+        if (snake.cells.length > snake.maxCells) {
+          snake.cells.pop();
+        }
+
+        // elma yeme
+        if (snake.x === apple.x && snake.y === apple.y) {
+          snake.maxCells++;
+          score++;
+          apple.x = getRandomInt(0, canvas.width / grid) * grid;
+          apple.y = getRandomInt(0, canvas.height / grid) * grid;
+        }
+
+        // elmayı çiz
+        ctx.fillStyle = '#ff0044';
+        ctx.fillRect(apple.x, apple.y, grid-2, grid-2);
+
+        // yılanı çiz
+        ctx.fillStyle = '#00ff9d';
+        snake.cells.forEach((cell, index) => {
+          ctx.fillRect(cell.x, cell.y, grid-2, grid-2);
+          if (index === 0) {
+            ctx.fillStyle = '#00ccff'; // baş farklı renk olsun
+          } else {
+            ctx.fillStyle = '#00ff9d';
+          }
+        });
+
+        // kendine çarpma (game over yerine reset yapıyorum basit olsun)
+        for (let i = 1; i < snake.cells.length; i++) {
+          if (snake.x === snake.cells[i].x && snake.y === snake.cells[i].y) {
+            snake.x = 160; snake.y = 160;
+            snake.cells = [];
+            snake.maxCells = 4;
+            snake.dx = grid; snake.dy = 0;
+            score = 0;
+            apple.x = getRandomInt(0, canvas.width / grid) * grid;
+            apple.y = getRandomInt(0, canvas.height / grid) * grid;
+          }
+        }
+      }
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft' && snake.dx === 0) {
+          snake.dx = -grid; snake.dy = 0;
+        } else if (e.key === 'ArrowUp' && snake.dy === 0) {
+          snake.dx = 0; snake.dy = -grid;
+        } else if (e.key === 'ArrowRight' && snake.dx === 0) {
+          snake.dx = grid; snake.dy = 0;
+        } else if (e.key === 'ArrowDown' && snake.dy === 0) {
+          snake.dx = 0; snake.dy = grid;
+        }
+      });
+
+      requestAnimationFrame(loop);
+    }
+  </script>
+</body>
+</html>
