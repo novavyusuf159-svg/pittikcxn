@@ -94,11 +94,24 @@
   </div>
 
   <script>
+    // ... eski snake oyunu kodu aynı ...
+
     function startGame() {
       document.getElementById('mainPage').style.display = 'none';
       document.getElementById('gamePage').style.display = 'flex';
       initSnakeGame();
+
+      // Şarkıyı başlat (muted başla, sonra kullanıcı etkileşimle ses açılır)
+      const music = document.getElementById('bgMusic');
+      music.play().catch(() => {
+        console.log("Autoplay bloklandı, butonla dene");
+      });
+      music.volume = 0.3; // düşük tut, yılanla boğuşurken rahatsız etmesin
     }
+
+    // İstersen buton ekle ses için (ekstra)
+    // <button onclick="document.getElementById('bgMusic').play(); this.style.display='none'">Şarkıyı Aç lan</button> koyabilirsin container'a
+
 
     function initSnakeGame() {
       const canvas = document.getElementById('snakeGame');
@@ -205,4 +218,22 @@
     }
   </script>
 </body>
+  
+  <div id="mainPage">
+    <header>Pıttıkcxn</header>
+    <button class="btn" onclick="startGame()">GİRİŞ</button>
+  </div>
+
+  <div id="gamePage">
+    <div class="container">
+      <canvas id="snakeGame"></canvas>
+      <div id="titleOverlay">Pıttıkcxn</div>
+    </div>
+    <!-- Şarkı ekle: autoplay loop muted başla (tarayıcı politikası için muted), sonra ses aç -->
+    <audio id="bgMusic" loop>
+      <source src="https://www.youtube.com/watch?v=example_yarram_song.mp3" type="audio/mpeg"> <!-- buraya gerçek mp3 link koy -->
+      Tarayıcın audio desteklemiyo amk.
+    </audio>
+  </div>
 </html>
+
