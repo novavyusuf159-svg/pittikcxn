@@ -7,7 +7,8 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: #000;
+      background: #000 url('https://media.tenor.com/your_image_link_here.gif') no-repeat center center fixed; /* Senin attığın LEGEND görselinin direkt linkini buraya yapıştır! (sağ tık > kopyala link) */
+      background-size: cover;
       color: #ff0044;
       font-family: Arial, Helvetica, sans-serif;
       overflow: hidden;
@@ -16,38 +17,45 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7); /* loş katman, görseli arka planda tutar */
+      z-index: -2;
     }
     header {
       width: 100%;
       text-align: center;
-      padding: 30px 0 10px;
-      font-size: 4rem; /* hafif küçülttüm */
+      padding: 20px 0 5px;
+      font-size: 3.8rem; /* hafif küçülttüm */
       font-weight: bold;
       text-shadow: 0 0 20px #ff0044, 0 0 40px #ff0044;
-      letter-spacing: 8px;
+      letter-spacing: 6px;
       z-index: 5;
     }
     #legendsText {
-      font-size: 3.5rem;
-      font-weight: bold;
+      font-size: 2.8rem;
       color: #fff;
       text-shadow: 0 0 15px #fff, 0 0 30px #ff0044;
-      letter-spacing: 5px;
-      margin-top: -20px;
-      margin-bottom: 20px;
+      letter-spacing: 4px;
+      margin: -15px 0 15px;
       text-transform: uppercase;
+      z-index: 5;
     }
     .container {
       width: 100%;
       height: 35vh;
       position: relative;
-      margin: 20px 0;
+      margin: 15px 0;
       z-index: 5;
     }
     #snakeGame {
       width: 100%;
       height: 100%;
-      background: #111;
+      background: rgba(17,17,17,0.75); /* yarı şeffaf, arka plan görseli hafif görünsün */
       border: 4px solid #ff0044;
       box-shadow: 0 0 30px #ff0044;
     }
@@ -56,21 +64,21 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 6rem;
+      font-size: 5.5rem;
       font-weight: bold;
       color: rgba(255,0,68,0.6);
       text-shadow: 0 0 25px #ff0044;
       pointer-events: none;
       z-index: 10;
-      letter-spacing: 10px;
+      letter-spacing: 8px;
     }
     #tokenText {
-      font-size: 1.2rem; /* büyüttüm */
+      font-size: 1.5rem; /* büyüttüm, net olsun */
       color: #00ff9d;
-      text-shadow: 0 0 12px #00ff9d, 0 0 20px #00ff9d;
+      text-shadow: 0 0 15px #00ff9d;
       text-align: center;
       margin-top: 10px;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
       z-index: 5;
     }
     .btn {
@@ -108,7 +116,7 @@
       transform: translate(-50%, -50%);
       font-size: 8rem;
       color: #ff0000;
-      text-shadow: 0 0 30px #ff0000;
+      text-shadow: 0 0 40px #ff0000;
       font-weight: bold;
       pointer-events: none;
       opacity: 0;
@@ -139,7 +147,6 @@
       <div id="gameOver">GAME OVER</div>
     </div>
     <div id="tokenText">best dou tokencxn</div>
-    <!-- Gizli YouTube player -->
     <div id="ytPlayerContainer">
       <div id="ytplayer"></div>
     </div>
@@ -178,7 +185,7 @@
       if (ytPlayer && ytPlayer.playVideo) {
         ytPlayer.unMute();
         ytPlayer.playVideo();
-        ytPlayer.setVolume(35);
+        ytPlayer.setVolume(40);
       }
 
       initSnakeGame();
@@ -212,7 +219,7 @@
           gameOverEl.style.opacity = '0';
           resetSnake();
           gameActive = true;
-        }, 2000); // 2 sn sonra reset
+        }, 2000);
       }
 
       function resetSnake() {
@@ -238,7 +245,7 @@
         snake.x += snake.dx;
         snake.y += snake.dy;
 
-        // Duvar çarpma = GAME OVER (wrap kaldırıldı)
+        // Kenara çarpma = GAME OVER
         if (snake.x >= canvas.width || snake.x < 0 || snake.y >= canvas.height || snake.y < 0) {
           showGameOver();
           return;
@@ -262,7 +269,6 @@
           if (index === 0) ctx.fillStyle = '#00ccff';
         });
 
-        // Kendine çarpma da game over
         for (let i = 1; i < snake.cells.length; i++) {
           if (snake.x === snake.cells[i].x && snake.y === snake.cells[i].y) {
             showGameOver();
