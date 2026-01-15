@@ -27,7 +27,7 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      gap: 80px;
+      gap: 100px;
       z-index: 5;
     }
     #gameContainer {
@@ -150,9 +150,9 @@
 
   <script>
     let ytPlayer;
+    let animationId;
     let currentGame = null;
     let score = 0;
-    let gameActive = false;
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const scoreEl = document.getElementById('score');
@@ -171,14 +171,22 @@
         height: '1',
         width: '1',
         videoId: 'NMRhx71bGo4',
-        playerVars: { autoplay: 1, loop: 1, playlist: 'NMRhx71bGo4', controls: 0, mute: 1 },
+        playerVars: {
+          autoplay: 1,
+          loop: 1,
+          playlist: 'NMRhx71bGo4',
+          controls: 0,
+          showinfo: 0,
+          rel: 0,
+          mute: 1
+        },
         events: {
           onReady: (event) => {
             event.target.playVideo();
             setTimeout(() => {
               event.target.unMute();
               event.target.setVolume(40);
-            }, 1500);
+            }, 2000);
           }
         }
       });
@@ -190,7 +198,6 @@
     }
 
     function showGameOver() {
-      gameActive = false;
       gameOverEl.style.opacity = '1';
       setTimeout(() => restartBtn.style.display = 'block', 1500);
     }
@@ -211,11 +218,10 @@
       score = 0;
       updateScore();
       currentGame = 'snake';
-      gameActive = true;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const grid = 20;
       let count = 0;
+      let gameActive = true;
 
       let snake = { x: canvas.width / 2, y: canvas.height / 2, dx: grid, dy: 0, cells: [], maxCells: 4 };
       let apple = { x: Math.floor(canvas.width / 2 / grid) * grid, y: Math.floor(canvas.height / 2 / grid) * grid };
@@ -223,8 +229,8 @@
       function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
 
       function loop() {
-        if (!gameActive || currentGame !== 'snake') return;
-        requestAnimationFrame(loop);
+        if (currentGame !== 'snake') return;
+        animationId = requestAnimationFrame(loop);
 
         if (++count < 8) return;
         count = 0;
@@ -272,7 +278,7 @@
       document.addEventListener('keydown', snakeKeyHandler);
 
       function snakeKeyHandler(e) {
-        if (!gameActive || currentGame !== 'snake') return;
+        if (currentGame !== 'snake') return;
         if (e.key === 'ArrowLeft' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
         else if (e.key === 'ArrowUp' && snake.dy === 0) { snake.dx = 0; snake.dy = -grid; }
         else if (e.key === 'ArrowRight' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
@@ -287,8 +293,6 @@
       score = 0;
       updateScore();
       currentGame = 'pacman';
-      gameActive = true;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const pacRadius = 20;
       let pacX = canvas.width / 2;
@@ -306,8 +310,8 @@
       }
 
       function loop() {
-        if (!gameActive || currentGame !== 'pacman') return;
-        requestAnimationFrame(loop);
+        if (currentGame !== 'pacman') return;
+        animationId = requestAnimationFrame(loop);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -344,7 +348,7 @@
       document.addEventListener('keydown', pacmanKeyHandler);
 
       function pacmanKeyHandler(e) {
-        if (!gameActive || currentGame !== 'pacman') return;
+        if (currentGame !== 'pacman') return;
         if (e.key === 'ArrowRight') pacDir = 'right';
         if (e.key === 'ArrowLeft') pacDir = 'left';
         if (e.key === 'ArrowUp') pacDir = 'up';
@@ -354,16 +358,13 @@
       loop();
     }
 
+    // Sayfa yüklendiğinde müzik başlasın
     window.onload = () => {
-      startMusic();
-    };
-
-    function startMusic() {
       if (ytPlayer && ytPlayer.unMute) {
         ytPlayer.unMute();
         ytPlayer.setVolume(40);
       }
-    }
+    };
   </script>
 </body>
 </html>
