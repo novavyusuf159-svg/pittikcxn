@@ -26,30 +26,34 @@
       z-index: -1;
     }
     #menu {
-      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 50px;
       z-index: 10;
     }
     #gameFrame {
-      width: 70%;
-      height: 60vh;
+      width: 60vw; /* 100% genişlik hissi, responsive */
+      height: 35vh; /* tam senin dediğin %35 yükseklik */
       border: 5px solid #ff0044;
       box-shadow: 0 0 40px #ff0044;
       background: rgba(0,0,0,0.8);
       position: relative;
       overflow: hidden;
-      margin-bottom: 20px;
     }
     #gameCanvas {
       width: 100%;
       height: 100%;
-      display: none;
+      display: block; /* her zaman block, game'ler üstüne yazar */
+    }
+    .gameBtns {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
     .gameBtn {
-      display: block;
-      width: 300px;
+      width: 200px;
       padding: 20px;
-      margin: 15px auto;
-      font-size: 2rem;
+      font-size: 1.8rem;
       background: #ff0044;
       color: #000;
       border: none;
@@ -59,23 +63,35 @@
       transition: all 0.3s;
     }
     .gameBtn:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
       box-shadow: 0 0 40px #ff0044;
     }
     #tokenText {
-      font-size: 1.8rem;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5rem;
       color: #00ff9d;
       text-shadow: 0 0 15px #00ff9d;
-      text-align: center;
-      margin-top: 20px;
-      letter-spacing: 5px;
+      letter-spacing: 4px;
+      z-index: 15;
+    }
+    #score {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 2rem;
+      color: #fff;
+      text-shadow: 0 0 10px #fff;
+      z-index: 15;
     }
     #gameOver {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 8rem;
+      font-size: 6rem;
       color: #ff0000;
       text-shadow: 0 0 40px #ff0000;
       font-weight: bold;
@@ -88,19 +104,19 @@
       top: 70%;
       left: 50%;
       transform: translate(-50%, -50%);
-      padding: 20px 60px;
-      font-size: 2.5rem;
+      padding: 15px 40px;
+      font-size: 2rem;
       background: #00ff9d;
       color: #000;
       border: none;
-      border-radius: 15px;
+      border-radius: 10px;
       cursor: pointer;
       box-shadow: 0 0 30px #00ff9d;
       display: none;
       z-index: 20;
     }
     #restartBtn:hover {
-      transform: scale(1.1);
+      transform: translate(-50%, -50%) scale(1.1);
     }
     #ytPlayerContainer {
       position: absolute;
@@ -116,13 +132,16 @@
   <div id="menu">
     <div id="gameFrame">
       <canvas id="gameCanvas"></canvas>
+      <div id="score">Skor: 0</div>
       <div id="gameOver">GAME OVER</div>
-      <button id="restartBtn">RESTART</button>
+      <button id="restartBtn" onclick="restartCurrentGame()">RESTART</button>
     </div>
-    <button class="gameBtn" onclick="startSnake()">1. Yılan</button>
-    <button class="gameBtn" onclick="startPacman()">2. Pac-Man</button>
-    <div id="tokenText">best dou tokencxn</div>
+    <div class="gameBtns">
+      <button class="gameBtn" onclick="startSnake()">1. Yılan</button>
+      <button class="gameBtn" onclick="startPacman()">2. Pac-Man</button>
+    </div>
   </div>
+  <div id="tokenText">best dou tokencxn</div>
 
   <div id="ytPlayerContainer">
     <div id="ytplayer"></div>
@@ -133,8 +152,10 @@
   <script>
     let ytPlayer;
     let currentGame = null;
+    let score = 0;
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score');
     const gameOverEl = document.getElementById('gameOver');
     const restartBtn = document.getElementById('restartBtn');
 
@@ -145,36 +166,44 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Müzik başlat
+    // Müzik
     function onYouTubeIframeAPIReady() {
       ytPlayer = new YT.Player('ytplayer', {
         height: '1',
         width: '1',
         videoId: 'NMRhx71bGo4',
-        playerVars: { autoplay: 0, loop: 1, playlist: 'NMRhx71bGo4', controls: 0, showinfo: 0, rel: 0, mute: 1 },
-        events: { onReady: e => e.target.playVideo() }
+        playerVars: { autoplay: 1, loop: 1, playlist: 'NMRhx71bGo4', controls: 0, mute: 1 },
+        events: { onReady: e => { e.target.unMute(); e.target.setVolume(40); } }
       });
     }
 
-    function startMusic() {
-      if (ytPlayer && ytPlayer.unMute) {
-        ytPlayer.unMute();
-        ytPlayer.setVolume(40);
-      }
+    function updateScore(newScore) {
+      score = newScore;
+      scoreEl.textContent = 'Skor: ' + score;
     }
 
-    // Ortak reset
-    function resetGame() {
+    function showGameOver() {
+      gameOverEl.style.opacity = '1';
+      setTimeout(() => restartBtn.style.display = 'block', 1500);
+    }
+
+    function hideGameOver() {
       gameOverEl.style.opacity = '0';
       restartBtn.style.display = 'none';
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Yılan oyunu (önceki fix'li)
+    function restartCurrentGame() {
+      hideGameOver();
+      if (currentGame === 'snake') startSnake();
+      else if (currentGame === 'pacman') startPacman();
+    }
+
+    // Yılan
+    let snakeLoopId;
     function startSnake() {
       startMusic();
-      resetGame();
-      document.getElementById('gameCanvas').style.display = 'block';
+      hideGameOver();
+      updateScore(0);
       currentGame = 'snake';
 
       const grid = 20;
@@ -186,15 +215,9 @@
 
       function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
 
-      function showGameOver() {
-        gameActive = false;
-        gameOverEl.style.opacity = '1';
-        setTimeout(() => restartBtn.style.display = 'block', 2000);
-      }
-
       function loop() {
-        if (!gameActive || currentGame !== 'snake') return;
-        requestAnimationFrame(loop);
+        if (!gameActive) return;
+        snakeLoopId = requestAnimationFrame(loop);
 
         if (++count < 8) return;
         count = 0;
@@ -205,6 +228,7 @@
         snake.y += snake.dy;
 
         if (snake.x < 0 || snake.x >= canvas.width || snake.y < 0 || snake.y >= canvas.height) {
+          gameActive = false;
           showGameOver();
           return;
         }
@@ -214,6 +238,7 @@
 
         if (snake.x === apple.x && snake.y === apple.y) {
           snake.maxCells++;
+          updateScore(snake.maxCells - 4);
           apple.x = getRandomInt(0, canvas.width / grid) * grid;
           apple.y = getRandomInt(0, canvas.height / grid) * grid;
         }
@@ -224,87 +249,149 @@
         ctx.fillStyle = '#00ff9d';
         snake.cells.forEach((cell, index) => {
           ctx.fillRect(cell.x, cell.y, grid-2, grid-2);
-          if (index === 0) ctx.fillStyle = '#00ccff';
+          ctx.fillStyle = index === 0 ? '#00ccff' : '#00ff9d';
         });
 
         for (let i = 1; i < snake.cells.length; i++) {
           if (snake.x === snake.cells[i].x && snake.y === snake.cells[i].y) {
+            gameActive = false;
             showGameOver();
             return;
           }
         }
       }
 
-      document.addEventListener('keydown', e => {
-        if (!gameActive || currentGame !== 'snake') return;
+      document.removeEventListener('keydown', pacmanKeyHandler);
+      document.addEventListener('keydown', snakeKeyHandler);
+
+      function snakeKeyHandler(e) {
+        if (!gameActive) return;
         if (e.key === 'ArrowLeft' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
         else if (e.key === 'ArrowUp' && snake.dy === 0) { snake.dx = 0; snake.dy = -grid; }
         else if (e.key === 'ArrowRight' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
         else if (e.key === 'ArrowDown' && snake.dy === 0) { snake.dx = 0; snake.dy = grid; }
-      });
+      }
 
       loop();
     }
 
-    // Pac-Man basit versiyon (klasik, no lib)
+    // Pac-Man
+    let pacmanLoopId;
     function startPacman() {
       startMusic();
-      resetGame();
-      document.getElementById('gameCanvas').style.display = 'block';
+      hideGameOver();
+      updateScore(0);
       currentGame = 'pacman';
 
-      // Basit Pac-Man (örnek kod, senin istediğin gibi)
-      let pacman = { x: canvas.width / 2, y: canvas.height / 2, radius: 20, speed: 5, dir: 'right' };
+      const pacRadius = 25;
+      let pacX = canvas.width / 2;
+      let pacY = canvas.height / 2;
+      let pacDir = 0; // 0 right, 1 down, 2 left, 3 up
+      let pacSpeed = 4;
       let mouthAngle = 0;
-      let mouthOpening = true;
+      let mouthDir = 1;
+
+      let ghosts = [
+        { x: 100, y: 100, dx: 2, dy: 2, color: '#ff0000' },
+        { x: canvas.width - 100, y: 100, dx: -2, dy: 2, color: '#ff69b4' },
+        { x: 100, y: canvas.height - 100, dx: 2, dy: -2, color: '#00ff00' },
+        { x: canvas.width - 100, y: canvas.height - 100, dx: -2, dy: -2, color: '#00bfff' }
+      ];
+
+      let dots = [];
+      for (let i = 0; i < 50; i++) {
+        dots.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          eaten: false
+        });
+      }
 
       function loop() {
-        if (!gameActive || currentGame !== 'pacman') return;
-        requestAnimationFrame(loop);
+        if (!gameActive) return;
+        pacmanLoopId = requestAnimationFrame(loop);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Pac-Man çiz
+        // Pac-Man hareket
+        if (pacDir === 0) pacX += pacSpeed;
+        if (pacDir === 1) pacY += pacSpeed;
+        if (pacDir === 2) pacX -= pacSpeed;
+        if (pacDir === 3) pacY -= pacSpeed;
+
+        // Wrap
+        if (pacX > canvas.width) pacX = 0;
+        if (pacX < 0) pacX = canvas.width;
+        if (pacY > canvas.height) pacY = 0;
+        if (pacY < 0) pacY = canvas.height;
+
+        // Ağız animasyon
+        mouthAngle += mouthDir * 0.15;
+        if (mouthAngle > Math.PI / 3) mouthDir = -1;
+        if (mouthAngle < 0) mouthDir = 1;
+
         ctx.fillStyle = 'yellow';
         ctx.beginPath();
-        ctx.arc(pacman.x, pacman.y, pacman.radius, mouthAngle, Math.PI * 2 - mouthAngle);
-        ctx.lineTo(pacman.x, pacman.y);
+        ctx.arc(pacX, pacY, pacRadius, mouthAngle, Math.PI * 2 - mouthAngle);
+        ctx.lineTo(pacX, pacY);
         ctx.fill();
 
-        // Ağız aç/kapa animasyon
-        if (mouthOpening) mouthAngle += 0.1;
-        else mouthAngle -= 0.1;
-        if (mouthAngle > Math.PI / 4) mouthOpening = false;
-        if (mouthAngle < 0) mouthOpening = true;
+        // Hayaletler
+        ghosts.forEach(ghost => {
+          ghost.x += ghost.dx;
+          ghost.y += ghost.dy;
+          if (ghost.x < 0 || ghost.x > canvas.width) ghost.dx *= -1;
+          if (ghost.y < 0 || ghost.y > canvas.height) ghost.dy *= -1;
 
-        // Hareket (ok tuşları)
-        if (pacman.dir === 'right') pacman.x += pacman.speed;
-        else if (pacman.dir === 'left') pacman.x -= pacman.speed;
-        else if (pacman.dir === 'up') pacman.y -= pacman.speed;
-        else if (pacman.dir === 'down') pacman.y += pacman.speed;
+          ctx.fillStyle = ghost.color;
+          ctx.beginPath();
+          ctx.arc(ghost.x, ghost.y, pacRadius, 0, Math.PI * 2);
+          ctx.fill();
+        });
 
-        // Kenar wrap (Pac-Man gibi)
-        if (pacman.x > canvas.width) pacman.x = 0;
-        if (pacman.x < 0) pacman.x = canvas.width;
-        if (pacman.y > canvas.height) pacman.y = 0;
-        if (pacman.y < 0) pacman.y = canvas.height;
+        // Nokta yeme
+        dots.forEach(dot => {
+          if (!dot.eaten && Math.hypot(pacX - dot.x, pacY - dot.y) < pacRadius) {
+            dot.eaten = true;
+            updateScore(score + 10);
+          }
+          if (!dot.eaten) {
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(dot.x, dot.y, 5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+
+        // Hayalet çarpma
+        ghosts.forEach(ghost => {
+          if (Math.hypot(pacX - ghost.x, pacY - ghost.y) < pacRadius * 1.5) {
+            gameActive = false;
+            showGameOver();
+          }
+        });
       }
 
-      document.addEventListener('keydown', e => {
-        if (!gameActive || currentGame !== 'pacman') return;
-        if (e.key === 'ArrowRight') pacman.dir = 'right';
-        if (e.key === 'ArrowLeft') pacman.dir = 'left';
-        if (e.key === 'ArrowUp') pacman.dir = 'up';
-        if (e.key === 'ArrowDown') pacman.dir = 'down';
-      });
+      document.removeEventListener('keydown', snakeKeyHandler);
+      document.addEventListener('keydown', pacmanKeyHandler);
+
+      function pacmanKeyHandler(e) {
+        if (!gameActive) return;
+        if (e.key === 'ArrowRight') pacDir = 0;
+        else if (e.key === 'ArrowDown') pacDir = 1;
+        else if (e.key === 'ArrowLeft') pacDir = 2;
+        else if (e.key === 'ArrowUp') pacDir = 3;
+      }
 
       loop();
     }
 
-    restartBtn.onclick = () => {
-      if (currentGame === 'snake') startSnake();
-      else if (currentGame === 'pacman') startPacman();
-    };
+    function startMusic() {
+      if (ytPlayer) {
+        ytPlayer.unMute();
+        ytPlayer.setVolume(40);
+      }
+    }
   </script>
 </body>
 </html>
