@@ -27,7 +27,7 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      gap: 100px;
+      gap: 80px;
       z-index: 5;
     }
     #gameContainer {
@@ -166,26 +166,19 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Müzik
     function onYouTubeIframeAPIReady() {
       ytPlayer = new YT.Player('ytplayer', {
         height: '1',
         width: '1',
         videoId: 'NMRhx71bGo4',
-        playerVars: {
-          autoplay: 1,
-          loop: 1,
-          playlist: 'NMRhx71bGo4',
-          controls: 0,
-          mute: 1
-        },
+        playerVars: { autoplay: 1, loop: 1, playlist: 'NMRhx71bGo4', controls: 0, mute: 1 },
         events: {
           onReady: (event) => {
             event.target.playVideo();
             setTimeout(() => {
               event.target.unMute();
               event.target.setVolume(40);
-            }, 2000);
+            }, 1500);
           }
         }
       });
@@ -213,7 +206,6 @@
       else if (currentGame === 'pacman') startPacman();
     };
 
-    // Yılan
     function startSnake() {
       hideGameOver();
       score = 0;
@@ -290,7 +282,6 @@
       loop();
     }
 
-    // Pac-Man
     function startPacman() {
       hideGameOver();
       score = 0;
@@ -363,16 +354,16 @@
       loop();
     }
 
+    window.onload = () => {
+      startMusic();
+    };
+
     function startMusic() {
       if (ytPlayer && ytPlayer.unMute) {
         ytPlayer.unMute();
         ytPlayer.setVolume(40);
       }
     }
-
-    window.onload = () => {
-      startMusic();
-    };
   </script>
 </body>
 </html>
