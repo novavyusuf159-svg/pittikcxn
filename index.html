@@ -7,8 +7,7 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: #000 url('https://media.tenor.com/Fur3YBnb8AQAAAAM/lil-durk-we-eat-nuts.gif') no-repeat center center fixed; /* Lil Durk Chiraq GIF - istersen değiştir */
-      background-size: cover;
+      background: #000;
       color: #ff0044;
       font-family: Arial, Helvetica, sans-serif;
       overflow: hidden;
@@ -17,24 +16,26 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      position: relative;
-    }
-    body::before { /* Loş katman: GIF'i gangster vibe'a uygun karart */
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.65); /* daha fazla loş istersen 0.7-0.8 yap */
-      z-index: -2;
     }
     header {
       width: 100%;
       text-align: center;
-      padding: 40px 0 20px;
-      font-size: 5rem;
+      padding: 30px 0 10px;
+      font-size: 4rem; /* hafif küçülttüm */
       font-weight: bold;
       text-shadow: 0 0 20px #ff0044, 0 0 40px #ff0044;
       letter-spacing: 8px;
       z-index: 5;
+    }
+    #legendsText {
+      font-size: 3.5rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 15px #fff, 0 0 30px #ff0044;
+      letter-spacing: 5px;
+      margin-top: -20px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
     }
     .container {
       width: 100%;
@@ -46,7 +47,7 @@
     #snakeGame {
       width: 100%;
       height: 100%;
-      background: rgba(17,17,17,0.75); /* Yarı şeffaf ki GIF hafif görünsün */
+      background: #111;
       border: 4px solid #ff0044;
       box-shadow: 0 0 30px #ff0044;
     }
@@ -64,13 +65,12 @@
       letter-spacing: 10px;
     }
     #tokenText {
-      font-size: 0.7rem; /* çok küçük */
+      font-size: 1.2rem; /* büyüttüm */
       color: #00ff9d;
-      text-shadow: 0 0 8px #00ff9d;
+      text-shadow: 0 0 12px #00ff9d, 0 0 20px #00ff9d;
       text-align: center;
-      margin-top: 8px;
-      letter-spacing: 1.5px;
-      opacity: 0.85;
+      margin-top: 10px;
+      letter-spacing: 3px;
       z-index: 5;
     }
     .btn {
@@ -101,6 +101,20 @@
       z-index: 5;
     }
     #gamePage { display: none; }
+    #gameOver {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 8rem;
+      color: #ff0000;
+      text-shadow: 0 0 30px #ff0000;
+      font-weight: bold;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s;
+      z-index: 20;
+    }
     #ytPlayerContainer {
       position: absolute;
       width: 1px;
@@ -114,6 +128,7 @@
 
   <div id="mainPage">
     <header>Pıttıkcxn</header>
+    <div id="legendsText">LEGENDS OF PİTTIKCXN</div>
     <button class="btn" onclick="startGame()">GİRİŞ</button>
   </div>
 
@@ -121,9 +136,10 @@
     <div class="container">
       <canvas id="snakeGame"></canvas>
       <div id="titleOverlay">Pıttıkcxn</div>
+      <div id="gameOver">GAME OVER</div>
     </div>
-    <div id="tokenText">best dou tokencxn</div> <!-- Küçük yazı yılan altına -->
-    <!-- Gizli YouTube player for Let It Happen -->
+    <div id="tokenText">best dou tokencxn</div>
+    <!-- Gizli YouTube player -->
     <div id="ytPlayerContainer">
       <div id="ytplayer"></div>
     </div>
@@ -162,7 +178,7 @@
       if (ytPlayer && ytPlayer.playVideo) {
         ytPlayer.unMute();
         ytPlayer.playVideo();
-        ytPlayer.setVolume(35); // düşük tut
+        ytPlayer.setVolume(35);
       }
 
       initSnakeGame();
@@ -171,6 +187,7 @@
     function initSnakeGame() {
       const canvas = document.getElementById('snakeGame');
       const ctx = canvas.getContext('2d');
+      const gameOverEl = document.getElementById('gameOver');
 
       function resizeCanvas() {
         canvas.width = canvas.offsetWidth;
@@ -181,13 +198,36 @@
 
       const grid = 20;
       let count = 0;
+      let gameActive = true;
 
       let snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
       let apple = { x: 320, y: 320 };
 
       function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
 
+      function showGameOver() {
+        gameActive = false;
+        gameOverEl.style.opacity = '1';
+        setTimeout(() => {
+          gameOverEl.style.opacity = '0';
+          resetSnake();
+          gameActive = true;
+        }, 2000); // 2 sn sonra reset
+      }
+
+      function resetSnake() {
+        snake.x = 160;
+        snake.y = 160;
+        snake.cells = [];
+        snake.maxCells = 4;
+        snake.dx = grid;
+        snake.dy = 0;
+        apple.x = getRandomInt(0, canvas.width / grid) * grid;
+        apple.y = getRandomInt(0, canvas.height / grid) * grid;
+      }
+
       function loop() {
+        if (!gameActive) return;
         animationId = requestAnimationFrame(loop);
 
         if (++count < 8) return;
@@ -198,10 +238,11 @@
         snake.x += snake.dx;
         snake.y += snake.dy;
 
-        if (snake.x >= canvas.width) snake.x = 0;
-        if (snake.x < 0) snake.x = canvas.width - grid;
-        if (snake.y >= canvas.height) snake.y = 0;
-        if (snake.y < 0) snake.y = canvas.height - grid;
+        // Duvar çarpma = GAME OVER (wrap kaldırıldı)
+        if (snake.x >= canvas.width || snake.x < 0 || snake.y >= canvas.height || snake.y < 0) {
+          showGameOver();
+          return;
+        }
 
         snake.cells.unshift({x: snake.x, y: snake.y});
         if (snake.cells.length > snake.maxCells) snake.cells.pop();
@@ -221,18 +262,17 @@
           if (index === 0) ctx.fillStyle = '#00ccff';
         });
 
+        // Kendine çarpma da game over
         for (let i = 1; i < snake.cells.length; i++) {
           if (snake.x === snake.cells[i].x && snake.y === snake.cells[i].y) {
-            snake.x = 160; snake.y = 160;
-            snake.cells = [];
-            snake.maxCells = 4;
-            snake.dx = grid; snake.dy = 0;
-            break;
+            showGameOver();
+            return;
           }
         }
       }
 
       document.addEventListener('keydown', e => {
+        if (!gameActive) return;
         if (e.key === 'ArrowLeft' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
         else if (e.key === 'ArrowUp' && snake.dy === 0) { snake.dx = 0; snake.dy = -grid; }
         else if (e.key === 'ArrowRight' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
