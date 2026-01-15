@@ -27,7 +27,7 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      gap: 80px;
+      gap: 100px;
       z-index: 5;
     }
     #gameContainer {
@@ -80,7 +80,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 6rem;
+      font-size: 8rem;
       color: #ff0000;
       text-shadow: 0 0 40px #ff0000;
       opacity: 0;
@@ -152,6 +152,7 @@
     let ytPlayer;
     let currentGame = null;
     let score = 0;
+    let gameActive = false;
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const scoreEl = document.getElementById('score');
@@ -165,7 +166,7 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Müzik (autoplay fix)
+    // Müzik
     function onYouTubeIframeAPIReady() {
       ytPlayer = new YT.Player('ytplayer', {
         height: '1',
@@ -176,8 +177,6 @@
           loop: 1,
           playlist: 'NMRhx71bGo4',
           controls: 0,
-          showinfo: 0,
-          rel: 0,
           mute: 1
         },
         events: {
@@ -186,7 +185,7 @@
             setTimeout(() => {
               event.target.unMute();
               event.target.setVolume(40);
-            }, 2000); // tarayıcı bloklamasını aşmak için gecikme
+            }, 2000);
           }
         }
       });
@@ -198,6 +197,7 @@
     }
 
     function showGameOver() {
+      gameActive = false;
       gameOverEl.style.opacity = '1';
       setTimeout(() => restartBtn.style.display = 'block', 1500);
     }
@@ -213,17 +213,17 @@
       else if (currentGame === 'pacman') startPacman();
     };
 
-    // Yılan Oyunu
+    // Yılan
     function startSnake() {
       hideGameOver();
       score = 0;
       updateScore();
       currentGame = 'snake';
+      gameActive = true;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const grid = 20;
       let count = 0;
-      let gameActive = true;
 
       let snake = { x: canvas.width / 2, y: canvas.height / 2, dx: grid, dy: 0, cells: [], maxCells: 4 };
       let apple = { x: Math.floor(canvas.width / 2 / grid) * grid, y: Math.floor(canvas.height / 2 / grid) * grid };
@@ -264,7 +264,7 @@
         ctx.fillStyle = '#00ff9d';
         snake.cells.forEach((cell, index) => {
           ctx.fillRect(cell.x, cell.y, grid-2, grid-2);
-          if (index === 0) ctx.fillStyle = '#00ccff';
+          ctx.fillStyle = index === 0 ? '#00ccff' : '#00ff9d';
         });
 
         for (let i = 1; i < snake.cells.length; i++) {
@@ -290,12 +290,13 @@
       loop();
     }
 
-    // Pac-Man Oyunu
+    // Pac-Man
     function startPacman() {
       hideGameOver();
       score = 0;
       updateScore();
       currentGame = 'pacman';
+      gameActive = true;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const pacRadius = 20;
@@ -314,18 +315,16 @@
       }
 
       function loop() {
-        if (!currentGame === 'pacman') return;
+        if (!gameActive || currentGame !== 'pacman') return;
         requestAnimationFrame(loop);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Pac-Man çiz
         ctx.fillStyle = 'yellow';
         ctx.beginPath();
         ctx.arc(pacX, pacY, pacRadius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Hareket
         if (pacDir === 'right') pacX += pacSpeed;
         if (pacDir === 'left') pacX -= pacSpeed;
         if (pacDir === 'up') pacY -= pacSpeed;
@@ -336,7 +335,6 @@
         if (pacY > canvas.height) pacY = 0;
         if (pacY < 0) pacY = canvas.height;
 
-        // Nokta yeme
         dots.forEach(dot => {
           if (!dot.eaten && Math.hypot(pacX - dot.x, pacY - dot.y) < pacRadius + 10) {
             dot.eaten = true;
@@ -355,7 +353,7 @@
       document.addEventListener('keydown', pacmanKeyHandler);
 
       function pacmanKeyHandler(e) {
-        if (currentGame !== 'pacman') return;
+        if (!gameActive || currentGame !== 'pacman') return;
         if (e.key === 'ArrowRight') pacDir = 'right';
         if (e.key === 'ArrowLeft') pacDir = 'left';
         if (e.key === 'ArrowUp') pacDir = 'up';
@@ -372,7 +370,6 @@
       }
     }
 
-    // Sayfa yüklendiğinde müzik başlasın
     window.onload = () => {
       startMusic();
     };
