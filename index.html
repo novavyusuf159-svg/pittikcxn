@@ -7,7 +7,8 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: #000;
+      background: #000 url('https://cdn.discordapp.com/attachments/1005219866690736129/1238164510079058010/5.gif?ex=6969148f&is=6967c30f&hm=00892cd3ee5931c7cace3bdba3786b533362b9331c07f6116a7950b01c589b19') no-repeat center center fixed;
+      background-size: cover;
       color: #ff0044;
       font-family: Arial, Helvetica, sans-serif;
       overflow: hidden;
@@ -15,28 +16,51 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: -2;
+    }
+    #mainPage {
+      text-align: center;
+      z-index: 5;
     }
     header {
-      width: 100%;
-      text-align: center;
-      padding: 30px 0 10px;
-      font-size: 4rem; /* hafif küçülttüm */
+      font-size: 5rem;
       font-weight: bold;
-      text-shadow: 0 0 20px #ff0044, 0 0 40px #ff0044;
-      letter-spacing: 8px;
-      z-index: 5;
+      text-shadow: 0 0 25px #ff0044, 0 0 50px #ff0044;
+      letter-spacing: 10px;
+      margin-bottom: 10px;
     }
     #legendsText {
       font-size: 3.5rem;
-      font-weight: bold;
       color: #fff;
-      text-shadow: 0 0 15px #fff, 0 0 30px #ff0044;
-      letter-spacing: 5px;
-      margin-top: -20px;
-      margin-bottom: 20px;
+      text-shadow: 0 0 20px #fff, 0 0 40px #ff0044;
+      letter-spacing: 6px;
+      margin-bottom: 40px;
       text-transform: uppercase;
     }
+    .btn {
+      padding: 25px 80px;
+      font-size: 3rem;
+      background: #ff0044;
+      color: #000;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 30px #ff0044;
+      transition: all 0.4s;
+    }
+    .btn:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 60px #ff0044;
+    }
+    #gamePage { display: none; }
     .container {
       width: 100%;
       height: 35vh;
@@ -47,73 +71,49 @@
     #snakeGame {
       width: 100%;
       height: 100%;
-      background: #111;
+      background: rgba(17,17,17,0.75);
       border: 4px solid #ff0044;
       box-shadow: 0 0 30px #ff0044;
     }
-    #titleOverlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 6rem;
-      font-weight: bold;
-      color: rgba(255,0,68,0.6);
-      text-shadow: 0 0 25px #ff0044;
-      pointer-events: none;
-      z-index: 10;
-      letter-spacing: 10px;
-    }
     #tokenText {
-      font-size: 1.2rem; /* büyüttüm */
+      font-size: 1.5rem;
       color: #00ff9d;
-      text-shadow: 0 0 12px #00ff9d, 0 0 20px #00ff9d;
+      text-shadow: 0 0 15px #00ff9d;
       text-align: center;
-      margin-top: 10px;
-      letter-spacing: 3px;
+      margin-top: 15px;
+      letter-spacing: 4px;
       z-index: 5;
     }
-    .btn {
-      margin-top: 30px;
-      padding: 20px 60px;
-      font-size: 2.5rem;
-      background: #ff0044;
-      color: #000;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 0 20px #ff0044;
-      transition: all 0.3s;
-      z-index: 5;
-    }
-    .btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 40px #ff0044;
-    }
-    #mainPage, #gamePage {
-      width: 100%;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 5;
-    }
-    #gamePage { display: none; }
     #gameOver {
       position: absolute;
-      top: 50%;
+      top: 40%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 8rem;
       color: #ff0000;
-      text-shadow: 0 0 30px #ff0000;
+      text-shadow: 0 0 40px #ff0000;
       font-weight: bold;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.5s;
       z-index: 20;
+    }
+    #restartBtn {
+      margin-top: 20px;
+      padding: 15px 50px;
+      font-size: 2rem;
+      background: #00ff9d;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #00ff9d;
+      display: none;
+      z-index: 20;
+    }
+    #restartBtn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 40px #00ff9d;
     }
     #ytPlayerContainer {
       position: absolute;
@@ -135,11 +135,10 @@
   <div id="gamePage">
     <div class="container">
       <canvas id="snakeGame"></canvas>
-      <div id="titleOverlay">Pıttıkcxn</div>
       <div id="gameOver">GAME OVER</div>
+      <button id="restartBtn" onclick="restartGame()">RESTART</button>
     </div>
     <div id="tokenText">best dou tokencxn</div>
-    <!-- Gizli YouTube player -->
     <div id="ytPlayerContainer">
       <div id="ytplayer"></div>
     </div>
@@ -150,6 +149,7 @@
   <script>
     let ytPlayer;
     let animationId;
+    let gameActive = false;
 
     function onYouTubeIframeAPIReady() {
       ytPlayer = new YT.Player('ytplayer', {
@@ -178,16 +178,26 @@
       if (ytPlayer && ytPlayer.playVideo) {
         ytPlayer.unMute();
         ytPlayer.playVideo();
-        ytPlayer.setVolume(35);
+        ytPlayer.setVolume(40);
       }
 
       initSnakeGame();
+      gameActive = true;
+    }
+
+    function restartGame() {
+      document.getElementById('restartBtn').style.display = 'none';
+      document.getElementById('gameOver').style.opacity = '0';
+      resetSnake();
+      gameActive = true;
+      loop();
     }
 
     function initSnakeGame() {
       const canvas = document.getElementById('snakeGame');
       const ctx = canvas.getContext('2d');
       const gameOverEl = document.getElementById('gameOver');
+      const restartBtn = document.getElementById('restartBtn');
 
       function resizeCanvas() {
         canvas.width = canvas.offsetWidth;
@@ -198,7 +208,6 @@
 
       const grid = 20;
       let count = 0;
-      let gameActive = true;
 
       let snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
       let apple = { x: 320, y: 320 };
@@ -210,9 +219,8 @@
         gameOverEl.style.opacity = '1';
         setTimeout(() => {
           gameOverEl.style.opacity = '0';
-          resetSnake();
-          gameActive = true;
-        }, 2000); // 2 sn sonra reset
+          restartBtn.style.display = 'block';
+        }, 2000);
       }
 
       function resetSnake() {
@@ -238,7 +246,6 @@
         snake.x += snake.dx;
         snake.y += snake.dy;
 
-        // Duvar çarpma = GAME OVER (wrap kaldırıldı)
         if (snake.x >= canvas.width || snake.x < 0 || snake.y >= canvas.height || snake.y < 0) {
           showGameOver();
           return;
@@ -262,7 +269,6 @@
           if (index === 0) ctx.fillStyle = '#00ccff';
         });
 
-        // Kendine çarpma da game over
         for (let i = 1; i < snake.cells.length; i++) {
           if (snake.x === snake.cells[i].x && snake.y === snake.cells[i].y) {
             showGameOver();
