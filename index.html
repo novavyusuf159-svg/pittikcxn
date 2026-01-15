@@ -14,7 +14,6 @@
       overflow: hidden;
       height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
@@ -22,98 +21,86 @@
     body::before {
       content: "";
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      inset: 0;
       background: rgba(0,0,0,0.65);
-      z-index: -2;
+      z-index: -1;
     }
-    #mainPage {
+    #menu {
       text-align: center;
-      z-index: 5;
+      z-index: 10;
     }
-    header {
-      font-size: 5rem;
-      font-weight: bold;
-      text-shadow: 0 0 25px #ff0044, 0 0 50px #ff0044;
-      letter-spacing: 10px;
-      margin-bottom: 10px;
+    #gameFrame {
+      width: 70%;
+      height: 60vh;
+      border: 5px solid #ff0044;
+      box-shadow: 0 0 40px #ff0044;
+      background: rgba(0,0,0,0.8);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
     }
-    #legendsText {
-      font-size: 3.5rem;
-      color: #fff;
-      text-shadow: 0 0 20px #fff, 0 0 40px #ff0044;
-      letter-spacing: 6px;
-      margin-bottom: 40px;
-      text-transform: uppercase;
+    #gameCanvas {
+      width: 100%;
+      height: 100%;
+      display: none;
     }
-    .btn {
-      padding: 25px 80px;
-      font-size: 3rem;
+    .gameBtn {
+      display: block;
+      width: 300px;
+      padding: 20px;
+      margin: 15px auto;
+      font-size: 2rem;
       background: #ff0044;
       color: #000;
       border: none;
-      border-radius: 15px;
+      border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 0 30px #ff0044;
-      transition: all 0.4s;
+      box-shadow: 0 0 20px #ff0044;
+      transition: all 0.3s;
     }
-    .btn:hover {
-      transform: scale(1.15);
-      box-shadow: 0 0 60px #ff0044;
-    }
-    #gamePage { display: none; }
-    .container {
-      width: 100%;
-      height: 35vh;
-      position: relative;
-      margin: 20px 0;
-      z-index: 5;
-    }
-    #snakeGame {
-      width: 100%;
-      height: 100%;
-      background: rgba(17,17,17,0.75);
-      border: 4px solid #ff0044;
-      box-shadow: 0 0 30px #ff0044;
+    .gameBtn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 40px #ff0044;
     }
     #tokenText {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       color: #00ff9d;
       text-shadow: 0 0 15px #00ff9d;
       text-align: center;
-      margin-top: 15px;
-      letter-spacing: 4px;
-      z-index: 5;
+      margin-top: 20px;
+      letter-spacing: 5px;
     }
     #gameOver {
       position: absolute;
-      top: 40%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 8rem;
       color: #ff0000;
       text-shadow: 0 0 40px #ff0000;
       font-weight: bold;
-      pointer-events: none;
       opacity: 0;
       transition: opacity 0.5s;
       z-index: 20;
     }
     #restartBtn {
-      margin-top: 20px;
-      padding: 15px 50px;
-      font-size: 2rem;
+      position: absolute;
+      top: 70%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 60px;
+      font-size: 2.5rem;
       background: #00ff9d;
       color: #000;
       border: none;
-      border-radius: 10px;
+      border-radius: 15px;
       cursor: pointer;
-      box-shadow: 0 0 20px #00ff9d;
+      box-shadow: 0 0 30px #00ff9d;
       display: none;
       z-index: 20;
     }
     #restartBtn:hover {
       transform: scale(1.1);
-      box-shadow: 0 0 40px #00ff9d;
     }
     #ytPlayerContainer {
       position: absolute;
@@ -126,88 +113,73 @@
 </head>
 <body>
 
-  <div id="mainPage">
-    <header>Pıttıkcxn</header>
-    <div id="legendsText">LEGENDS OF PİTTIKCXN</div>
-    <button class="btn" onclick="startGame()">GİRİŞ</button>
+  <div id="menu">
+    <div id="gameFrame">
+      <canvas id="gameCanvas"></canvas>
+      <div id="gameOver">GAME OVER</div>
+      <button id="restartBtn">RESTART</button>
+    </div>
+    <button class="gameBtn" onclick="startSnake()">1. Yılan</button>
+    <button class="gameBtn" onclick="startPacman()">2. Pac-Man</button>
+    <div id="tokenText">best dou tokencxn</div>
   </div>
 
-  <div id="gamePage">
-    <div class="container">
-      <canvas id="snakeGame"></canvas>
-      <div id="gameOver">GAME OVER</div>
-      <button id="restartBtn" onclick="restartGame()">RESTART</button>
-    </div>
-    <div id="tokenText">best dou tokencxn</div>
-    <div id="ytPlayerContainer">
-      <div id="ytplayer"></div>
-    </div>
+  <div id="ytPlayerContainer">
+    <div id="ytplayer"></div>
   </div>
 
   <script src="https://www.youtube.com/iframe_api"></script>
 
   <script>
     let ytPlayer;
-    let animationId;
-    let gameActive = false;
+    let currentGame = null;
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const gameOverEl = document.getElementById('gameOver');
+    const restartBtn = document.getElementById('restartBtn');
 
+    function resizeCanvas() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Müzik başlat
     function onYouTubeIframeAPIReady() {
       ytPlayer = new YT.Player('ytplayer', {
         height: '1',
         width: '1',
         videoId: 'NMRhx71bGo4',
-        playerVars: {
-          'autoplay': 0,
-          'loop': 1,
-          'playlist': 'NMRhx71bGo4',
-          'controls': 0,
-          'showinfo': 0,
-          'rel': 0,
-          'mute': 1
-        },
-        events: { 'onReady': onPlayerReady }
+        playerVars: { autoplay: 0, loop: 1, playlist: 'NMRhx71bGo4', controls: 0, showinfo: 0, rel: 0, mute: 1 },
+        events: { onReady: e => e.target.playVideo() }
       });
     }
 
-    function onPlayerReady(event) {}
-
-    function startGame() {
-      document.getElementById('mainPage').style.display = 'none';
-      document.getElementById('gamePage').style.display = 'flex';
-
-      if (ytPlayer && ytPlayer.playVideo) {
+    function startMusic() {
+      if (ytPlayer && ytPlayer.unMute) {
         ytPlayer.unMute();
-        ytPlayer.playVideo();
         ytPlayer.setVolume(40);
       }
-
-      initSnakeGame();
-      gameActive = true;
     }
 
-    function restartGame() {
-      document.getElementById('restartBtn').style.display = 'none';
-      document.getElementById('gameOver').style.opacity = '0';
-      resetSnake();
-      gameActive = true;
-      loop();
+    // Ortak reset
+    function resetGame() {
+      gameOverEl.style.opacity = '0';
+      restartBtn.style.display = 'none';
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    function initSnakeGame() {
-      const canvas = document.getElementById('snakeGame');
-      const ctx = canvas.getContext('2d');
-      const gameOverEl = document.getElementById('gameOver');
-      const restartBtn = document.getElementById('restartBtn');
-
-      function resizeCanvas() {
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-      }
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
+    // Yılan oyunu (önceki fix'li)
+    function startSnake() {
+      startMusic();
+      resetGame();
+      document.getElementById('gameCanvas').style.display = 'block';
+      currentGame = 'snake';
 
       const grid = 20;
       let count = 0;
+      let gameActive = true;
 
       let snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
       let apple = { x: 320, y: 320 };
@@ -217,26 +189,12 @@
       function showGameOver() {
         gameActive = false;
         gameOverEl.style.opacity = '1';
-        setTimeout(() => {
-          gameOverEl.style.opacity = '0';
-          restartBtn.style.display = 'block';
-        }, 2000);
-      }
-
-      function resetSnake() {
-        snake.x = 160;
-        snake.y = 160;
-        snake.cells = [];
-        snake.maxCells = 4;
-        snake.dx = grid;
-        snake.dy = 0;
-        apple.x = getRandomInt(0, canvas.width / grid) * grid;
-        apple.y = getRandomInt(0, canvas.height / grid) * grid;
+        setTimeout(() => restartBtn.style.display = 'block', 2000);
       }
 
       function loop() {
-        if (!gameActive) return;
-        animationId = requestAnimationFrame(loop);
+        if (!gameActive || currentGame !== 'snake') return;
+        requestAnimationFrame(loop);
 
         if (++count < 8) return;
         count = 0;
@@ -246,7 +204,7 @@
         snake.x += snake.dx;
         snake.y += snake.dy;
 
-        if (snake.x >= canvas.width || snake.x < 0 || snake.y >= canvas.height || snake.y < 0) {
+        if (snake.x < 0 || snake.x >= canvas.width || snake.y < 0 || snake.y >= canvas.height) {
           showGameOver();
           return;
         }
@@ -278,7 +236,7 @@
       }
 
       document.addEventListener('keydown', e => {
-        if (!gameActive) return;
+        if (!gameActive || currentGame !== 'snake') return;
         if (e.key === 'ArrowLeft' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
         else if (e.key === 'ArrowUp' && snake.dy === 0) { snake.dx = 0; snake.dy = -grid; }
         else if (e.key === 'ArrowRight' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
@@ -287,6 +245,66 @@
 
       loop();
     }
+
+    // Pac-Man basit versiyon (klasik, no lib)
+    function startPacman() {
+      startMusic();
+      resetGame();
+      document.getElementById('gameCanvas').style.display = 'block';
+      currentGame = 'pacman';
+
+      // Basit Pac-Man (örnek kod, senin istediğin gibi)
+      let pacman = { x: canvas.width / 2, y: canvas.height / 2, radius: 20, speed: 5, dir: 'right' };
+      let mouthAngle = 0;
+      let mouthOpening = true;
+
+      function loop() {
+        if (!gameActive || currentGame !== 'pacman') return;
+        requestAnimationFrame(loop);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Pac-Man çiz
+        ctx.fillStyle = 'yellow';
+        ctx.beginPath();
+        ctx.arc(pacman.x, pacman.y, pacman.radius, mouthAngle, Math.PI * 2 - mouthAngle);
+        ctx.lineTo(pacman.x, pacman.y);
+        ctx.fill();
+
+        // Ağız aç/kapa animasyon
+        if (mouthOpening) mouthAngle += 0.1;
+        else mouthAngle -= 0.1;
+        if (mouthAngle > Math.PI / 4) mouthOpening = false;
+        if (mouthAngle < 0) mouthOpening = true;
+
+        // Hareket (ok tuşları)
+        if (pacman.dir === 'right') pacman.x += pacman.speed;
+        else if (pacman.dir === 'left') pacman.x -= pacman.speed;
+        else if (pacman.dir === 'up') pacman.y -= pacman.speed;
+        else if (pacman.dir === 'down') pacman.y += pacman.speed;
+
+        // Kenar wrap (Pac-Man gibi)
+        if (pacman.x > canvas.width) pacman.x = 0;
+        if (pacman.x < 0) pacman.x = canvas.width;
+        if (pacman.y > canvas.height) pacman.y = 0;
+        if (pacman.y < 0) pacman.y = canvas.height;
+      }
+
+      document.addEventListener('keydown', e => {
+        if (!gameActive || currentGame !== 'pacman') return;
+        if (e.key === 'ArrowRight') pacman.dir = 'right';
+        if (e.key === 'ArrowLeft') pacman.dir = 'left';
+        if (e.key === 'ArrowUp') pacman.dir = 'up';
+        if (e.key === 'ArrowDown') pacman.dir = 'down';
+      });
+
+      loop();
+    }
+
+    restartBtn.onclick = () => {
+      if (currentGame === 'snake') startSnake();
+      else if (currentGame === 'pacman') startPacman();
+    };
   </script>
 </body>
 </html>
