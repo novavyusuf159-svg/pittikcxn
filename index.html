@@ -13,35 +13,36 @@
     }
     body {
       background: #000;
-      color: #FFD700; /* Altın sarısı */
+      color: #FFD700;
       font-family: 'Goldman', sans-serif;
       height: 100vh;
       overflow: hidden;
       position: relative;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
+      padding-top: 8vh; /* Yazıları biraz daha üstte yapar */
     }
     .founder {
       position: absolute;
       top: 20px;
       left: 30px;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       font-weight: 700;
       color: #FFD700;
-      text-shadow: 0 0 10px #FFD700;
+      text-shadow: 0 0 8px #FFD700;
     }
     .founder-sub {
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: #FFD700;
       opacity: 0.8;
-      margin-top: 5px;
+      margin-top: 4px;
     }
     .page {
       display: none;
       width: 100%;
       height: 100vh;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       flex-direction: column;
       position: absolute;
@@ -60,28 +61,31 @@
       transform: translateX(-100%);
     }
     .title {
-      font-size: 10rem; /* Çok büyük */
+      font-size: 12rem; /* Kocaman */
       font-weight: 700;
       text-transform: uppercase;
-      text-shadow: 0 0 30px #FFD700, 0 0 60px #FFD700;
-      margin-bottom: 10px;
-      letter-spacing: 10px;
+      text-shadow: 0 0 40px #FFD700, 0 0 80px #FFD700;
+      margin-bottom: 5px;
+      letter-spacing: 15px;
+      text-align: center;
     }
     .sub-title {
-      font-size: 2.8rem;
+      font-size: 2.2rem;
       text-shadow: 0 0 15px #FFD700;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
+      text-align: center;
     }
     .welcome {
-      font-size: 4rem;
-      text-shadow: 0 0 20px #FFD700;
-      margin-bottom: 80px;
+      font-size: 5rem;
+      text-shadow: 0 0 30px #FFD700;
+      margin-bottom: 100px;
+      text-align: center;
     }
     .arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 5rem;
+      font-size: 4.5rem;
       color: #FFD700;
       cursor: pointer;
       text-shadow: 0 0 20px #FFD700;
@@ -103,20 +107,20 @@
       justify-content: center;
     }
     #intro-button {
-      padding: 35px 130px;
-      font-size: 4.5rem;
+      padding: 35px 140px;
+      font-size: 4.8rem;
       background: #000;
       color: #FFD700;
       border: 8px solid #FFD700;
       border-radius: 30px;
       cursor: pointer;
-      box-shadow: 0 0 60px #FFD700;
+      box-shadow: 0 0 70px #FFD700;
       transition: all 0.4s;
     }
     #intro-button:hover {
       background: #FFD700;
       color: #000;
-      box-shadow: 0 0 100px #FFD700;
+      box-shadow: 0 0 120px #FFD700;
       transform: scale(1.05);
     }
   </style>
@@ -137,7 +141,7 @@
   <div id="page1" class="page">
     <div class="title">ENKA</div>
     <div class="sub-title">kuyumculuk</div>
-    <div class="welcome">Hoşgeldiniz</div>
+    <div class="welcome">HOŞGELDİNİZ</div>
     <div id="next-arrow" class="arrow">&gt;</div>
   </div>
 
