@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ENKA Kuyumculuk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -13,13 +14,13 @@
     body {
       background: #000;
       color: #FFD700; /* Altın sarısı */
-      font-family: Arial, sans-serif;
+      font-family: 'UnifrakturMaguntia', cursive; /* Giant Gnome vibe'ı için bu font (kalın, eski, büyük) */
       height: 100vh;
+      overflow: hidden;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      position: relative;
     }
     .page {
       display: none;
@@ -31,63 +32,46 @@
       position: absolute;
       top: 0;
       left: 0;
-      transition: left 0.5s ease;
+      transition: transform 0.6s ease-in-out;
     }
     .page.active {
       display: flex;
-      left: 0;
+      transform: translateX(0);
     }
-    .page.sliding {
-      left: 100%;
+    .page.sliding-right {
+      transform: translateX(100%);
     }
-    #intro-page {
-      display: flex;
+    .page.sliding-left {
+      transform: translateX(-100%);
     }
-    #intro-button {
-      padding: 20px 60px;
-      font-size: 2.5rem;
-      background: #000;
-      color: #FFD700;
-      border: 4px solid #FFD700;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 0 20px #FFD700;
-      transition: all 0.3s;
-    }
-    #intro-button:hover {
-      background: #FFD700;
-      color: #000;
-      box-shadow: 0 0 40px #FFD700;
-      transform: scale(1.1);
-    }
-    .main-title {
-      font-size: 6rem;
+    .title {
+      font-size: 9rem; /* Çok büyük */
       text-transform: uppercase;
-      text-shadow: 0 0 20px #FFD700;
+      text-shadow: 0 0 25px #FFD700, 0 0 50px #FFD700;
       margin-bottom: 10px;
+      letter-spacing: 8px;
     }
     .sub-title {
-      font-size: 1.5rem;
-      text-shadow: 0 0 10px #FFD700;
-      margin-bottom: 20px;
+      font-size: 2.5rem;
+      text-shadow: 0 0 15px #FFD700;
+      margin-bottom: 30px;
     }
     .welcome {
-      font-size: 2rem;
-      text-shadow: 0 0 15px #FFD700;
-      margin-bottom: 50px;
+      font-size: 3.5rem;
+      text-shadow: 0 0 20px #FFD700;
+      margin-bottom: 60px;
     }
     .arrow {
       position: absolute;
-      bottom: 50%;
-      font-size: 4rem;
-      cursor: pointer;
+      font-size: 5rem; /* Oklar küçültüldü */
       color: #FFD700;
-      text-shadow: 0 0 15px #FFD700;
+      cursor: pointer;
+      text-shadow: 0 0 20px #FFD700;
       transition: all 0.3s;
     }
     .arrow:hover {
-      transform: scale(1.2);
-      text-shadow: 0 0 30px #FFD700;
+      transform: scale(1.3);
+      text-shadow: 0 0 40px #FFD700;
     }
     #next-arrow {
       right: 50px;
@@ -101,71 +85,86 @@
 
   <!-- Giriş sayfası -->
   <div id="intro-page" class="page active">
-    <button id="intro-button">GİRİŞ</button>
+    <button id="intro-button" style="
+      padding: 30px 100px;
+      font-size: 3.5rem;
+      background: #000;
+      color: #FFD700;
+      border: 6px solid #FFD700;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 40px #FFD700;
+      transition: all 0.3s;
+    ">GİRİŞ</button>
   </div>
 
   <!-- Sayfa 1: Hoşgeldiniz -->
   <div id="page1" class="page">
-    <div class="main-title">ENKA</div>
+    <div class="title">ENKA</div>
     <div class="sub-title">kuyumculuk</div>
     <div class="welcome">Hoşgeldiniz</div>
-    <div id="next-arrow-page1" class="arrow next-arrow">&gt;</div>
+    <div id="next-arrow" class="arrow">&gt;</div>
   </div>
 
   <!-- Sayfa 2: Pullu Zincir -->
   <div id="page2" class="page">
-    <div class="main-title">Pullu Zincir</div>
-    <div class="sub-title"> (Şimdilik boş, fotoğraflar sonra eklenecek) </div>
-    <div id="prev-arrow-page2" class="arrow prev-arrow">&lt;</div>
-    <div id="next-arrow-page2" class="arrow next-arrow">&gt;</div>
+    <div class="title">Pullu Zincir</div>
+    <div class="sub-title">(Fotoğraflar yakında eklenecek)</div>
+    <div id="prev-arrow" class="arrow">&lt;</div>
+    <div id="next-arrow-page2" class="arrow">&gt;</div>
   </div>
 
   <!-- Sayfa 3: Pullu Bileklik -->
   <div id="page3" class="page">
-    <div class="main-title">Pullu Bileklik</div>
-    <div class="sub-title"> (Şimdilik boş, fotoğraflar sonra eklenecek) </div>
-    <div id="prev-arrow-page3" class="arrow prev-arrow">&lt;</div>
+    <div class="title">Pullu Bileklik</div>
+    <div class="sub-title">(Fotoğraflar yakında eklenecek)</div>
+    <div id="prev-arrow-page3" class="arrow">&lt;</div>
   </div>
 
   <script>
-    const introButton = document.getElementById('intro-button');
     const introPage = document.getElementById('intro-page');
     const page1 = document.getElementById('page1');
     const page2 = document.getElementById('page2');
     const page3 = document.getElementById('page3');
 
-    const nextArrowPage1 = document.getElementById('next-arrow-page1');
-    const prevArrowPage2 = document.getElementById('prev-arrow-page2');
+    const introButton = document.getElementById('intro-button');
+    const nextArrowPage1 = document.getElementById('next-arrow');
+    const prevArrowPage2 = document.getElementById('prev-arrow');
     const nextArrowPage2 = document.getElementById('next-arrow-page2');
     const prevArrowPage3 = document.getElementById('prev-arrow-page3');
 
     // Giriş butonu
     introButton.addEventListener('click', () => {
       introPage.style.display = 'none';
-      page1.style.display = 'flex';
+      page1.classList.add('active');
     });
 
-    // Sayfa geçişleri
+    // Sayfa 1'den Sayfa 2'ye
     nextArrowPage1.addEventListener('click', () => {
-      page1.style.left = '-100%';
-      page2.style.display = 'flex';
-      page2.style.left = '0';
+      page1.classList.remove('active');
+      page1.classList.add('sliding-right');
+      page2.classList.add('active');
     });
 
+    // Sayfa 2'den Sayfa 1'e geri
     prevArrowPage2.addEventListener('click', () => {
-      page2.style.left = '100%';
-      page1.style.left = '0';
+      page2.classList.remove('active');
+      page2.classList.add('sliding-right');
+      page1.classList.add('active');
     });
 
+    // Sayfa 2'den Sayfa 3'e
     nextArrowPage2.addEventListener('click', () => {
-      page2.style.left = '-100%';
-      page3.style.display = 'flex';
-      page3.style.left = '0';
+      page2.classList.remove('active');
+      page2.classList.add('sliding-right');
+      page3.classList.add('active');
     });
 
+    // Sayfa 3'den Sayfa 2'ye geri
     prevArrowPage3.addEventListener('click', () => {
-      page3.style.left = '100%';
-      page2.style.left = '0';
+      page3.classList.remove('active');
+      page3.classList.add('sliding-right');
+      page2.classList.add('active');
     });
   </script>
 </body>
