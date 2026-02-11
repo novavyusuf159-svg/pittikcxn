@@ -44,7 +44,7 @@
       top: 0;
       left: 0;
       transition: transform 0.6s ease-in-out;
-      padding-top: 15vh; /* Yazılar üstte */
+      padding-top: 15vh;
     }
     .page.active {
       display: flex;
@@ -57,7 +57,7 @@
       transform: translateX(-100%);
     }
     .title {
-      font-size: 5.5rem; /* Küçük */
+      font-size: 5.5rem;
       font-weight: 700;
       text-transform: uppercase;
       margin-bottom: 8px;
@@ -65,12 +65,12 @@
       text-align: center;
     }
     .sub-title {
-      font-size: 1.6rem; /* Küçük */
+      font-size: 1.6rem;
       margin-bottom: 30px;
       text-align: center;
     }
     .welcome {
-      font-size: 2.8rem; /* Küçük */
+      font-size: 2.8rem;
       margin-bottom: 60px;
       text-align: center;
     }
@@ -97,10 +97,10 @@
       font-size: 2.8rem;
       color: #FFD700;
     }
-    #next-arrow {
+    #next-arrow, #next-arrow-page2 {
       right: 20px;
     }
-    #prev-arrow {
+    #prev-arrow, #prev-arrow-page3 {
       left: 20px;
     }
     #intro-page {
@@ -161,7 +161,6 @@
   </div>
 
   <script>
-    // Sayfa elemanları
     const introPage = document.getElementById('intro-page');
     const page1 = document.getElementById('page1');
     const page2 = document.getElementById('page2');
@@ -173,7 +172,7 @@
     const nextArrowPage2 = document.getElementById('next-arrow-page2');
     const prevArrowPage3 = document.getElementById('prev-arrow-page3');
 
-    // Sayfa değiştirme (temiz geçiş)
+    // Sayfa değiştirme (temiz)
     function goToPage(current, next) {
       current.classList.add('sliding-right');
       setTimeout(() => {
@@ -194,23 +193,18 @@
       }, 600);
     }
 
-    // Giriş
     introButton.addEventListener('click', () => {
       introPage.style.display = 'none';
       page1.style.display = 'flex';
       page1.classList.add('active');
     });
 
-    // İleri: Sayfa 1 → Sayfa 2
     nextArrowPage1.addEventListener('click', () => goToPage(page1, page2));
 
-    // Geri: Sayfa 2 → Sayfa 1
     prevArrowPage2.addEventListener('click', () => goBackPage(page2, page1));
 
-    // İleri: Sayfa 2 → Sayfa 3
     nextArrowPage2.addEventListener('click', () => goToPage(page2, page3));
 
-    // Geri: Sayfa 3 → Sayfa 2
     prevArrowPage3.addEventListener('click', () => goBackPage(page3, page2));
   </script>
 </body>
