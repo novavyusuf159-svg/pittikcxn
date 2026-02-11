@@ -1,370 +1,172 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pıttıkcxn - FiveM</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ENKA Kuyumculuk</title>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
-      background: #000 url('https://cdn.discordapp.com/attachments/1005219866690736129/1238164510079058010/5.gif?ex=6969148f&is=6967c30f&hm=00892cd3ee5931c7cace3bdba3786b533362b9331c07f6116a7950b01c589b19') no-repeat center center fixed;
-      background-size: cover;
-      color: #ff0044;
-      font-family: Arial, Helvetica, sans-serif;
-      overflow: hidden;
+      background: #000;
+      color: #FFD700; /* Altın sarısı */
+      font-family: Arial, sans-serif;
       height: 100vh;
-      position: relative;
-    }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: -1;
-    }
-    #mainContent {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      gap: 100px;
-      z-index: 5;
-    }
-    #gameContainer {
-      width: 60vw;
-      height: 35vh;
-      border: 6px solid #ff0044;
-      box-shadow: 0 0 50px #ff0044;
-      background: rgba(0,0,0,0.85);
+      overflow: hidden;
       position: relative;
-      overflow: hidden;
     }
-    #gameCanvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-    #gameBtns {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-    }
-    .gameBtn {
-      padding: 20px 60px;
-      font-size: 2.2rem;
-      background: #ff0044;
-      color: #000;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-      box-shadow: 0 0 25px #ff0044;
-      transition: all 0.4s;
-    }
-    .gameBtn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 60px #ff0044;
-    }
-    #score {
-      position: absolute;
-      top: 10px;
-      left: 20px;
-      font-size: 2rem;
-      color: #fff;
-      background: rgba(0,0,0,0.5);
-      padding: 8px 15px;
-      border-radius: 10px;
-      z-index: 10;
-    }
-    #gameOver {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 8rem;
-      color: #ff0000;
-      text-shadow: 0 0 40px #ff0000;
-      opacity: 0;
-      transition: opacity 0.5s;
-      pointer-events: none;
-      z-index: 20;
-    }
-    #restartBtn {
-      position: absolute;
-      top: 70%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px 70px;
-      font-size: 2.5rem;
-      background: #00ff9d;
-      color: #000;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-      box-shadow: 0 0 30px #00ff9d;
+    .page {
       display: none;
-      z-index: 20;
-    }
-    #tokenText {
+      width: 100%;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
       position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 1.8rem;
-      color: #00ff9d;
-      text-shadow: 0 0 20px #00ff9d;
-      letter-spacing: 5px;
-      z-index: 10;
+      top: 0;
+      left: 0;
+      transition: left 0.5s ease;
     }
-    #ytPlayerContainer {
+    .page.active {
+      display: flex;
+      left: 0;
+    }
+    .page.sliding {
+      left: 100%;
+    }
+    #intro-page {
+      display: flex;
+    }
+    #intro-button {
+      padding: 20px 60px;
+      font-size: 2.5rem;
+      background: #000;
+      color: #FFD700;
+      border: 4px solid #FFD700;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #FFD700;
+      transition: all 0.3s;
+    }
+    #intro-button:hover {
+      background: #FFD700;
+      color: #000;
+      box-shadow: 0 0 40px #FFD700;
+      transform: scale(1.1);
+    }
+    .main-title {
+      font-size: 6rem;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px #FFD700;
+      margin-bottom: 10px;
+    }
+    .sub-title {
+      font-size: 1.5rem;
+      text-shadow: 0 0 10px #FFD700;
+      margin-bottom: 20px;
+    }
+    .welcome {
+      font-size: 2rem;
+      text-shadow: 0 0 15px #FFD700;
+      margin-bottom: 50px;
+    }
+    .arrow {
       position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      opacity: 0;
+      bottom: 50%;
+      font-size: 4rem;
+      cursor: pointer;
+      color: #FFD700;
+      text-shadow: 0 0 15px #FFD700;
+      transition: all 0.3s;
+    }
+    .arrow:hover {
+      transform: scale(1.2);
+      text-shadow: 0 0 30px #FFD700;
+    }
+    #next-arrow {
+      right: 50px;
+    }
+    #prev-arrow {
+      left: 50px;
     }
   </style>
 </head>
 <body>
 
-  <div id="mainContent">
-    <div id="gameContainer">
-      <canvas id="gameCanvas"></canvas>
-      <div id="score">Skor: 0</div>
-      <div id="gameOver">GAME OVER</div>
-      <button id="restartBtn">RESTART</button>
-    </div>
-
-    <div id="gameBtns">
-      <button class="gameBtn" onclick="startSnake()">1. Yılan</button>
-      <button class="gameBtn" onclick="startPacman()">2. Pac-Man</button>
-    </div>
+  <!-- Giriş sayfası -->
+  <div id="intro-page" class="page active">
+    <button id="intro-button">GİRİŞ</button>
   </div>
 
-  <div id="tokenText">best dou tokencxn</div>
-
-  <div id="ytPlayerContainer">
-    <div id="ytplayer"></div>
+  <!-- Sayfa 1: Hoşgeldiniz -->
+  <div id="page1" class="page">
+    <div class="main-title">ENKA</div>
+    <div class="sub-title">kuyumculuk</div>
+    <div class="welcome">Hoşgeldiniz</div>
+    <div id="next-arrow-page1" class="arrow next-arrow">&gt;</div>
   </div>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
+  <!-- Sayfa 2: Pullu Zincir -->
+  <div id="page2" class="page">
+    <div class="main-title">Pullu Zincir</div>
+    <div class="sub-title"> (Şimdilik boş, fotoğraflar sonra eklenecek) </div>
+    <div id="prev-arrow-page2" class="arrow prev-arrow">&lt;</div>
+    <div id="next-arrow-page2" class="arrow next-arrow">&gt;</div>
+  </div>
+
+  <!-- Sayfa 3: Pullu Bileklik -->
+  <div id="page3" class="page">
+    <div class="main-title">Pullu Bileklik</div>
+    <div class="sub-title"> (Şimdilik boş, fotoğraflar sonra eklenecek) </div>
+    <div id="prev-arrow-page3" class="arrow prev-arrow">&lt;</div>
+  </div>
 
   <script>
-    let ytPlayer;
-    let animationId;
-    let currentGame = null;
-    let score = 0;
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const scoreEl = document.getElementById('score');
-    const gameOverEl = document.getElementById('gameOver');
-    const restartBtn = document.getElementById('restartBtn');
+    const introButton = document.getElementById('intro-button');
+    const introPage = document.getElementById('intro-page');
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+    const page3 = document.getElementById('page3');
 
-    function resizeCanvas() {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    const nextArrowPage1 = document.getElementById('next-arrow-page1');
+    const prevArrowPage2 = document.getElementById('prev-arrow-page2');
+    const nextArrowPage2 = document.getElementById('next-arrow-page2');
+    const prevArrowPage3 = document.getElementById('prev-arrow-page3');
 
-    function onYouTubeIframeAPIReady() {
-      ytPlayer = new YT.Player('ytplayer', {
-        height: '1',
-        width: '1',
-        videoId: 'NMRhx71bGo4',
-        playerVars: {
-          autoplay: 1,
-          loop: 1,
-          playlist: 'NMRhx71bGo4',
-          controls: 0,
-          showinfo: 0,
-          rel: 0,
-          mute: 1
-        },
-        events: {
-          onReady: (event) => {
-            event.target.playVideo();
-            setTimeout(() => {
-              event.target.unMute();
-              event.target.setVolume(40);
-            }, 2000);
-          }
-        }
-      });
-    }
+    // Giriş butonu
+    introButton.addEventListener('click', () => {
+      introPage.style.display = 'none';
+      page1.style.display = 'flex';
+    });
 
-    function updateScore(add = 0) {
-      score += add;
-      scoreEl.textContent = 'Skor: ' + score;
-    }
+    // Sayfa geçişleri
+    nextArrowPage1.addEventListener('click', () => {
+      page1.style.left = '-100%';
+      page2.style.display = 'flex';
+      page2.style.left = '0';
+    });
 
-    function showGameOver() {
-      gameOverEl.style.opacity = '1';
-      setTimeout(() => restartBtn.style.display = 'block', 1500);
-    }
+    prevArrowPage2.addEventListener('click', () => {
+      page2.style.left = '100%';
+      page1.style.left = '0';
+    });
 
-    function hideGameOver() {
-      gameOverEl.style.opacity = '0';
-      restartBtn.style.display = 'none';
-    }
+    nextArrowPage2.addEventListener('click', () => {
+      page2.style.left = '-100%';
+      page3.style.display = 'flex';
+      page3.style.left = '0';
+    });
 
-    restartBtn.onclick = () => {
-      hideGameOver();
-      if (currentGame === 'snake') startSnake();
-      else if (currentGame === 'pacman') startPacman();
-    };
-
-    function startSnake() {
-      hideGameOver();
-      score = 0;
-      updateScore();
-      currentGame = 'snake';
-
-      const grid = 20;
-      let count = 0;
-      let gameActive = true;
-
-      let snake = { x: canvas.width / 2, y: canvas.height / 2, dx: grid, dy: 0, cells: [], maxCells: 4 };
-      let apple = { x: Math.floor(canvas.width / 2 / grid) * grid, y: Math.floor(canvas.height / 2 / grid) * grid };
-
-      function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
-
-      function loop() {
-        if (currentGame !== 'snake') return;
-        animationId = requestAnimationFrame(loop);
-
-        if (++count < 8) return;
-        count = 0;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        snake.x += snake.dx;
-        snake.y += snake.dy;
-
-        if (snake.x < 0 || snake.x >= canvas.width || snake.y < 0 || snake.y >= canvas.height) {
-          gameActive = false;
-          showGameOver();
-          return;
-        }
-
-        snake.cells.unshift({x: snake.x, y: snake.y});
-        if (snake.cells.length > snake.maxCells) snake.cells.pop();
-
-        if (snake.x === apple.x && snake.y === apple.y) {
-          snake.maxCells++;
-          updateScore(1);
-          apple.x = getRandomInt(0, canvas.width / grid) * grid;
-          apple.y = getRandomInt(0, canvas.height / grid) * grid;
-        }
-
-        ctx.fillStyle = '#ff0044';
-        ctx.fillRect(apple.x, apple.y, grid-2, grid-2);
-
-        ctx.fillStyle = '#00ff9d';
-        snake.cells.forEach((cell, index) => {
-          ctx.fillRect(cell.x, cell.y, grid-2, grid-2);
-          ctx.fillStyle = index === 0 ? '#00ccff' : '#00ff9d';
-        });
-
-        for (let i = 1; i < snake.cells.length; i++) {
-          if (snake.x === snake.cells[i].x && snake.y === snake.cells[i].y) {
-            gameActive = false;
-            showGameOver();
-            return;
-          }
-        }
-      }
-
-      document.removeEventListener('keydown', pacmanKeyHandler);
-      document.addEventListener('keydown', snakeKeyHandler);
-
-      function snakeKeyHandler(e) {
-        if (currentGame !== 'snake') return;
-        if (e.key === 'ArrowLeft' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
-        else if (e.key === 'ArrowUp' && snake.dy === 0) { snake.dx = 0; snake.dy = -grid; }
-        else if (e.key === 'ArrowRight' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
-        else if (e.key === 'ArrowDown' && snake.dy === 0) { snake.dx = 0; snake.dy = grid; }
-      }
-
-      loop();
-    }
-
-    function startPacman() {
-      hideGameOver();
-      score = 0;
-      updateScore();
-      currentGame = 'pacman';
-
-      const pacRadius = 20;
-      let pacX = canvas.width / 2;
-      let pacY = canvas.height / 2;
-      let pacDir = 'right';
-      let pacSpeed = 5;
-
-      let dots = [];
-      for (let i = 0; i < 30; i++) {
-        dots.push({
-          x: Math.random() * (canvas.width - 100) + 50,
-          y: Math.random() * (canvas.height - 100) + 50,
-          eaten: false
-        });
-      }
-
-      function loop() {
-        if (currentGame !== 'pacman') return;
-        animationId = requestAnimationFrame(loop);
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = 'yellow';
-        ctx.beginPath();
-        ctx.arc(pacX, pacY, pacRadius, 0, Math.PI * 2);
-        ctx.fill();
-
-        if (pacDir === 'right') pacX += pacSpeed;
-        if (pacDir === 'left') pacX -= pacSpeed;
-        if (pacDir === 'up') pacY -= pacSpeed;
-        if (pacDir === 'down') pacY += pacSpeed;
-
-        if (pacX > canvas.width) pacX = 0;
-        if (pacX < 0) pacX = canvas.width;
-        if (pacY > canvas.height) pacY = 0;
-        if (pacY < 0) pacY = canvas.height;
-
-        dots.forEach(dot => {
-          if (!dot.eaten && Math.hypot(pacX - dot.x, pacY - dot.y) < pacRadius + 10) {
-            dot.eaten = true;
-            updateScore(10);
-          }
-          if (!dot.eaten) {
-            ctx.fillStyle = 'white';
-            ctx.beginPath();
-            ctx.arc(dot.x, dot.y, 5, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        });
-      }
-
-      document.removeEventListener('keydown', snakeKeyHandler);
-      document.addEventListener('keydown', pacmanKeyHandler);
-
-      function pacmanKeyHandler(e) {
-        if (currentGame !== 'pacman') return;
-        if (e.key === 'ArrowRight') pacDir = 'right';
-        if (e.key === 'ArrowLeft') pacDir = 'left';
-        if (e.key === 'ArrowUp') pacDir = 'up';
-        if (e.key === 'ArrowDown') pacDir = 'down';
-      }
-
-      loop();
-    }
-
-    // Sayfa yüklendiğinde müzik başlasın
-    window.onload = () => {
-      if (ytPlayer && ytPlayer.unMute) {
-        ytPlayer.unMute();
-        ytPlayer.setVolume(40);
-      }
-    };
+    prevArrowPage3.addEventListener('click', () => {
+      page3.style.left = '100%';
+      page2.style.left = '0';
+    });
   </script>
 </body>
 </html>
