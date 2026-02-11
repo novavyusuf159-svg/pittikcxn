@@ -21,21 +21,21 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding-top: 10vh;
+      padding-top: 12vh; /* Yazıları biraz daha üstte */
     }
     .founder {
       position: absolute;
       top: 20px;
       left: 30px;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: #FFD700;
     }
     .founder-sub {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #FFD700;
       opacity: 0.8;
-      margin-top: 5px;
+      margin-top: 3px;
     }
     .page {
       display: none;
@@ -60,40 +60,51 @@
       transform: translateX(-100%);
     }
     .title {
-      font-size: 8rem; /* küçültüldü */
+      font-size: 6rem; /* küçültüldü */
       font-weight: 700;
       text-transform: uppercase;
       margin-bottom: 5px;
-      letter-spacing: 8px;
+      letter-spacing: 6px;
       text-align: center;
     }
     .sub-title {
-      font-size: 2rem; /* küçültüldü */
+      font-size: 1.8rem; /* küçültüldü */
       margin-bottom: 30px;
       text-align: center;
     }
     .welcome {
-      font-size: 3rem; /* küçültüldü */
-      margin-bottom: 80px;
+      font-size: 2.5rem; /* küçültüldü */
+      margin-bottom: 60px;
       text-align: center;
     }
-    .arrow {
+    .arrow-box {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 4rem;
-      color: #FFD700;
+      width: 80px;
+      height: 80px;
+      background: rgba(0,0,0,0.5);
+      border: 3px solid #FFD700;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       transition: all 0.3s;
     }
-    .arrow:hover {
-      transform: translateY(-50%) scale(1.2);
+    .arrow-box:hover {
+      background: rgba(255,215,0,0.2);
+      transform: translateY(-50%) scale(1.15);
+    }
+    .arrow {
+      font-size: 3rem;
+      color: #FFD700;
     }
     #next-arrow {
-      right: 40px;
+      right: 20px;
     }
     #prev-arrow {
-      left: 40px;
+      left: 20px;
     }
     #intro-page {
       display: flex;
@@ -134,22 +145,22 @@
     <div class="title">ENKA</div>
     <div class="sub-title">kuyumculuk</div>
     <div class="welcome">HOŞGELDİNİZ</div>
-    <div id="next-arrow" class="arrow">&gt;</div>
+    <div id="next-arrow" class="arrow-box"><div class="arrow">→</div></div>
   </div>
 
   <!-- Sayfa 2: Pullu Zincir -->
   <div id="page2" class="page">
     <div class="title">Pullu Zincir</div>
     <div class="sub-title">(Fotoğraflar yakında eklenecek)</div>
-    <div id="prev-arrow" class="arrow">&lt;</div>
-    <div id="next-arrow-page2" class="arrow">&gt;</div>
+    <div id="prev-arrow" class="arrow-box"><div class="arrow">←</div></div>
+    <div id="next-arrow-page2" class="arrow-box"><div class="arrow">→</div></div>
   </div>
 
   <!-- Sayfa 3: Pullu Bileklik -->
   <div id="page3" class="page">
     <div class="title">Pullu Bileklik</div>
     <div class="sub-title">(Fotoğraflar yakında eklenecek)</div>
-    <div id="prev-arrow-page3" class="arrow">&lt;</div>
+    <div id="prev-arrow-page3" class="arrow-box"><div class="arrow">←</div></div>
   </div>
 
   <script>
@@ -177,7 +188,7 @@
 
     prevArrowPage2.addEventListener('click', () => {
       page2.classList.remove('active');
-      page2.classList.add('sliding-left'); /* Geri giderken sola kay */
+      page2.classList.add('sliding-left');
       page1.classList.add('active');
     });
 
