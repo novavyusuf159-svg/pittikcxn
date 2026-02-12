@@ -21,17 +21,17 @@
     }
     .founder {
       position: fixed;
-      top: 10px;
-      left: 15px;
-      font-size: 1.4rem;
+      top: 8px;
+      left: 12px;
+      font-size: 1.2rem;
       font-weight: 700;
       color: #FFD700;
-      z-index: 1000;
+      z-index: 100;
     }
     .founder-sub {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       opacity: 0.8;
-      margin-top: 3px;
+      margin-top: 2px;
     }
     .page {
       display: none;
@@ -39,74 +39,79 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 15vh 5vw 140px;
+      padding: 10vh 4vw 140px;
     }
     .page.active {
       display: flex;
     }
     .title {
-      font-size: 3.5rem;
+      font-size: 2.8rem;
       font-weight: 700;
       text-transform: uppercase;
-      margin-bottom: 15px;
-      letter-spacing: 3px;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
       text-align: center;
     }
     .sub-title {
-      font-size: 1.3rem;
-      margin-bottom: 25px;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
       text-align: center;
     }
     .welcome {
-      font-size: 2rem;
-      margin-bottom: 40px;
+      font-size: 1.6rem;
+      margin-bottom: 35px;
       text-align: center;
     }
     .product-gallery {
       display: flex;
       flex-direction: column;
-      gap: 30px;
+      gap: 25px;
       width: 95%;
-      max-width: 500px;
-      margin: 20px 0 80px;
+      max-width: 450px;
+      margin: 15px 0 80px;
     }
     .product-img {
       width: 100%;
-      border: 4px solid #FFD700;
-      border-radius: 15px;
-      box-shadow: 0 0 20px #FFD700;
+      border: 3px solid #FFD700;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #FFD700;
       object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .product-img:hover {
+      transform: scale(1.03);
     }
     .arrow-container {
       position: fixed;
-      bottom: 20px;
+      bottom: 15px;
       left: 0;
       right: 0;
       display: flex;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 0 15px;
       z-index: 9999;
       pointer-events: auto;
     }
     .arrow-box {
-      width: 80px;
-      height: 80px;
-      background: rgba(0,0,0,0.9);
-      border: 5px solid #FFD700;
-      border-radius: 20px;
+      width: 70px;
+      height: 70px;
+      background: rgba(0,0,0,0.85);
+      border: 4px solid #FFD700;
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.3s;
-      box-shadow: 0 0 20px #FFD700;
+      box-shadow: 0 0 15px #FFD700;
     }
     .arrow-box:hover {
-      background: rgba(255,215,0,0.4);
-      transform: scale(1.2);
+      background: rgba(255,215,0,0.35);
+      transform: scale(1.15);
     }
     .arrow {
-      font-size: 3.2rem;
+      font-size: 2.8rem;
       color: #FFD700;
     }
     #intro-page {
@@ -117,12 +122,12 @@
       padding: 0 5vw;
     }
     #intro-button {
-      padding: 20px 80px;
-      font-size: 3rem;
+      padding: 18px 70px;
+      font-size: 2.8rem;
       background: #000;
       color: #FFD700;
-      border: 6px solid #FFD700;
-      border-radius: 20px;
+      border: 5px solid #FFD700;
+      border-radius: 18px;
       cursor: pointer;
       transition: all 0.4s;
     }
@@ -132,29 +137,66 @@
       transform: scale(1.05);
     }
 
-    /* Mobil dik mod */
+    /* Fotoğraf büyütme modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.95);
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+    }
+    .modal-content {
+      max-width: 90%;
+      max-height: 85vh;
+      border: 4px solid #FFD700;
+      border-radius: 15px;
+      box-shadow: 0 0 40px #FFD700;
+      cursor: pointer;
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #FFD700;
+      font-size: 4rem;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 10001;
+    }
+
+    /* Mobil dik mod optimizasyonu */
     @media (max-width: 768px) {
       .title {
-        font-size: 2.8rem;
+        font-size: 2.5rem;
       }
       .sub-title {
-        font-size: 1.1rem;
+        font-size: 1rem;
       }
       .welcome {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
       }
       .product-img {
-        max-height: 40vh;
+        max-height: 35vh;
       }
       .arrow-box {
-        width: 70px;
-        height: 70px;
+        width: 65px;
+        height: 65px;
       }
       .arrow {
-        font-size: 2.8rem;
+        font-size: 2.5rem;
       }
       .product-gallery {
-        gap: 25px;
+        gap: 20px;
+      }
+      #intro-button {
+        font-size: 2.5rem;
+        padding: 15px 60px;
       }
     }
   </style>
@@ -183,9 +225,9 @@
     <div class="title">Pullu Zincir</div>
     <div class="sub-title">Altın pullu zincir modelleri</div>
     <div class="product-gallery">
-      <img src="https://i.imgur.com/PHUKcgC.png" alt="Zincir 1" class="product-img">
-      <img src="https://i.imgur.com/8vUboG3.png" alt="Zincir 2" class="product-img">
-      <img src="https://i.imgur.com/ycqXYHy.png" alt="Zincir 3" class="product-img">
+      <img src="https://i.imgur.com/PHUKcgC.png" alt="Zincir 1" class="product-img" onclick="openModal(this.src)">
+      <img src="https://i.imgur.com/8vUboG3.png" alt="Zincir 2" class="product-img" onclick="openModal(this.src)">
+      <img src="https://i.imgur.com/ycqXYHy.png" alt="Zincir 3" class="product-img" onclick="openModal(this.src)">
     </div>
   </div>
 
@@ -194,9 +236,9 @@
     <div class="title">Pullu Bileklik</div>
     <div class="sub-title">Altın pullu bileklik modelleri</div>
     <div class="product-gallery">
-      <img src="https://i.imgur.com/B1W7QdF.png" alt="Bileklik 1" class="product-img">
-      <img src="https://i.imgur.com/j8zGzpc.png" alt="Bileklik 2" class="product-img">
-      <img src="https://i.imgur.com/cReTEWw.png" alt="Bileklik 3" class="product-img">
+      <img src="https://i.imgur.com/B1W7QdF.png" alt="Bileklik 1" class="product-img" onclick="openModal(this.src)">
+      <img src="https://i.imgur.com/j8zGzpc.png" alt="Bileklik 2" class="product-img" onclick="openModal(this.src)">
+      <img src="https://i.imgur.com/cReTEWw.png" alt="Bileklik 3" class="product-img" onclick="openModal(this.src)">
     </div>
   </div>
 
@@ -204,6 +246,12 @@
   <div class="arrow-container">
     <div id="prev-arrow" class="arrow-box"><div class="arrow">←</div></div>
     <div id="next-arrow" class="arrow-box"><div class="arrow">→</div></div>
+  </div>
+
+  <!-- Fotoğraf büyütme modal -->
+  <div id="modal" class="modal" onclick="closeModal()">
+    <span class="close" onclick="closeModal()">×</span>
+    <img class="modal-content" id="modalImg">
   </div>
 
   <script>
@@ -238,6 +286,18 @@
       else if (currentPage === page2) showPage(page1);
       else if (currentPage === page1) showPage(introPage);
     });
+
+    // Fotoğraf büyütme
+    function openModal(src) {
+      const modal = document.getElementById('modal');
+      const modalImg = document.getElementById('modalImg');
+      modalImg.src = src;
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
   </script>
 </body>
 </html>
