@@ -296,7 +296,7 @@
     </div>
   </div>
 
-  <!-- Sayfa 4: Küpeler (senin fotoğrafların eklendi) -->
+  <!-- Yeni Sayfa 4: Küpeler -->
   <div id="page4" class="page">
     <div class="title">Küpeler</div>
     <div class="sub-title">Altın küpe modelleri</div>
@@ -304,6 +304,17 @@
       <img src="https://i.imgur.com/is1dFof.png" alt="Küpe 1" class="product-img" onclick="openModal(this.src)">
       <img src="https://i.imgur.com/ECQbMMI.png" alt="Küpe 2" class="product-img" onclick="openModal(this.src)">
       <img src="https://i.imgur.com/eZYFQdU.png" alt="Küpe 3" class="product-img" onclick="openModal(this.src)">
+    </div>
+  </div>
+
+  <!-- Yeni Sayfa 5: Farklı Pullu Modelleri (senin attığın 3 fotoğraf alt alta) -->
+  <div id="page5" class="page">
+    <div class="title">Farklı Pullu Modelleri</div>
+    <div class="sub-title">Özel pullu takı modelleri</div>
+    <div class="product-gallery">
+      <img src="https://i.imgur.com/feQEkBz.png" alt="Pullu Model 1" class="product-img" onclick="openModal(this.src)">
+      <img src="https://i.imgur.com/kr2yH3z.png" alt="Pullu Model 2" class="product-img" onclick="openModal(this.src)">
+      <img src="https://i.imgur.com/hhV24pN.png" alt="Pullu Model 3" class="product-img" onclick="openModal(this.src)">
     </div>
   </div>
 
@@ -331,6 +342,7 @@
     const page2 = document.getElementById('page2');
     const page3 = document.getElementById('page3');
     const page4 = document.getElementById('page4');
+    const page5 = document.getElementById('page5');
 
     const introButton = document.getElementById('intro-button');
     const prevArrow = document.getElementById('prev-arrow');
@@ -352,10 +364,12 @@
       else if (currentPage === page1) showPage(page2);
       else if (currentPage === page2) showPage(page3);
       else if (currentPage === page3) showPage(page4);
+      else if (currentPage === page4) showPage(page5);
     });
 
     prevArrow.addEventListener('click', () => {
-      if (currentPage === page4) showPage(page3);
+      if (currentPage === page5) showPage(page4);
+      else if (currentPage === page4) showPage(page3);
       else if (currentPage === page3) showPage(page2);
       else if (currentPage === page2) showPage(page1);
       else if (currentPage === page1) showPage(introPage);
