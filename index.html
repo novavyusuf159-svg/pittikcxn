@@ -39,7 +39,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 15vh 5vw 120px;
+      padding: 15vh 5vw 140px;
     }
     .page.active {
       display: flex;
@@ -65,10 +65,10 @@
     .product-gallery {
       display: flex;
       flex-direction: column;
-      gap: 25px;
-      width: 90%;
+      gap: 30px;
+      width: 95%;
       max-width: 500px;
-      margin: 20px 0 60px;
+      margin: 20px 0 80px;
     }
     .product-img {
       width: 100%;
@@ -85,15 +85,15 @@
       display: flex;
       justify-content: space-between;
       padding: 0 20px;
-      z-index: 9999; /* En üstte olsun */
+      z-index: 9999;
       pointer-events: auto;
     }
     .arrow-box {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
       background: rgba(0,0,0,0.8);
-      border: 4px solid #FFD700;
-      border-radius: 15px;
+      border: 5px solid #FFD700;
+      border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -102,11 +102,11 @@
       box-shadow: 0 0 15px #FFD700;
     }
     .arrow-box:hover {
-      background: rgba(255,215,0,0.25);
-      transform: scale(1.15);
+      background: rgba(255,215,0,0.3);
+      transform: scale(1.2);
     }
     .arrow {
-      font-size: 2.8rem;
+      font-size: 3rem;
       color: #FFD700;
     }
     #intro-page {
@@ -133,7 +133,7 @@
     }
 
     /* Mobil dik mod */
-    @media (orientation: portrait) and (max-width: 768px) {
+    @media (max-width: 768px) {
       .title {
         font-size: 3rem;
       }
@@ -144,17 +144,17 @@
         font-size: 1.8rem;
       }
       .product-img {
-        max-height: 35vh;
+        max-height: 40vh;
       }
       .arrow-box {
-        width: 60px;
-        height: 60px;
+        width: 70px;
+        height: 70px;
       }
       .arrow {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
       }
       .product-gallery {
-        gap: 20px;
+        gap: 25px;
       }
     }
   </style>
@@ -183,9 +183,13 @@
     <div class="title">Pullu Zincir</div>
     <div class="sub-title">Altın pullu zincir modelleri</div>
     <div class="product-gallery">
-      <img src="https://cdn.discordapp.com/attachments/1458151186405261539/1471507703322116208/image.png?ex=698f2fd7&is=698dde57&hm=baa00edf92b239202b7e8ecf887d32cab80e58bd308cc7b4ea6db994a5f8d249" alt="Zincir 1" class="product-img">
-      <img src="https://cdn.discordapp.com/attachments/1458151186405261539/1471513808379052193/image.png?ex=698f3587&is=698de407&hm=3079314c187b59fe87eb2439e5dc434af978bfe66ddd37503dfc8a16837a2a90" alt="Zincir 2" class="product-img">
-      <img src="https://cdn.discordapp.com/attachments/1458151186405261539/1471513874275631187/image.png?ex=698f3597&is=698de417&hm=0d3452190965680efc5f4d9fc04386fc035644c0eb732bb0fbd4d25a00cb833d" alt="Zincir 3" class="product-img">
+      <img src="https://i.imgur.com/PHUKcgC.png" alt="Zincir 1" class="product-img">
+      <img src="https://i.imgur.com/8vUboG3.png" alt="Zincir 2" class="product-img">
+      <img src="https://i.imgur.com/ycqXYHy.png" alt="Zincir 3" class="product-img">
+    </div>
+    <div class="arrow-container">
+      <div id="prev-arrow" class="arrow-box"><div class="arrow">←</div></div>
+      <div id="next-arrow-page2" class="arrow-box"><div class="arrow">→</div></div>
     </div>
   </div>
 
@@ -194,16 +198,13 @@
     <div class="title">Pullu Bileklik</div>
     <div class="sub-title">Altın pullu bileklik modelleri</div>
     <div class="product-gallery">
-      <img src="https://cdn.discordapp.com/attachments/1458151186405261539/1471512911452307627/image.png?ex=698f34b1&is=698de331&hm=ce822247d24e3ce28761884fd1a588ac4b5c2a41ce69d6735d83071c4580789c" alt="Bileklik 1" class="product-img">
-      <img src="https://cdn.discordapp.com/attachments/1458151186405261539/1471513113785401487/image.png?ex=698f34e1&is=698de361&hm=2dfc3889779a9cb98b67be270899380b048f6b05fd02d89c389ae88c40fa8181" alt="Bileklik 2" class="product-img">
-      <img src="https://cdn.discordapp.com/attachments/1458151186405261539/1471507370147446784/image.png?ex=698f2f88&is=698dde08&hm=524bd7e59f18daa7b06a8cff28e19399b3798820b4c4fff210e24b08dc1b8b7f" alt="Bileklik 3" class="product-img">
+      <img src="https://i.imgur.com/B1W7QdF.png" alt="Bileklik 1" class="product-img">
+      <img src="https://i.imgur.com/j8zGzpc.png" alt="Bileklik 2" class="product-img">
+      <img src="https://i.imgur.com/cReTEWw.png" alt="Bileklik 3" class="product-img">
     </div>
-  </div>
-
-  <!-- Oklar (altta sabit) -->
-  <div class="arrow-container">
-    <div id="prev-arrow" class="arrow-box"><div class="arrow">←</div></div>
-    <div id="next-arrow" class="arrow-box"><div class="arrow">→</div></div>
+    <div class="arrow-container">
+      <div id="prev-arrow-page3" class="arrow-box"><div class="arrow">←</div></div>
+    </div>
   </div>
 
   <script>
