@@ -19,6 +19,27 @@
       overflow-y: auto;
       position: relative;
     }
+    .background-logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70vw;
+      height: 70vw;
+      max-width: 700px;
+      max-height: 700px;
+      z-index: -1;
+      pointer-events: none;
+      background: url('https://i.imgur.com/S91AmWi.png') center/cover no-repeat;
+      border-radius: 50%;
+      transition: filter 0.6s ease;
+    }
+    .page:not(#page1) .background-logo {
+      filter: blur(15px) brightness(0.4); /* Diğer sayfalarda bulanık ve koyu */
+    }
+    .page#page1 .background-logo {
+      filter: none; /* Hoşgeldiniz'de net */
+    }
     .founder {
       position: fixed;
       top: 15px;
@@ -42,7 +63,7 @@
       gap: 12px;
       z-index: 1000;
     }
-    .instagram-logo, .custom-logo, .music-control {
+    .instagram-logo, .custom-logo {
       width: 45px;
       height: 45px;
       cursor: pointer;
@@ -50,17 +71,9 @@
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(255,215,0,0.4);
     }
-    .instagram-logo:hover, .custom-logo:hover, .music-control:hover {
+    .instagram-logo:hover, .custom-logo:hover {
       transform: scale(1.12);
       box-shadow: 0 0 25px #FFD700;
-    }
-    .music-control {
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: #FFD700;
     }
     .page {
       display: none;
@@ -69,6 +82,7 @@
       align-items: center;
       justify-content: flex-start;
       padding: 15vh 5vw 140px;
+      position: relative;
     }
     .page.active {
       display: flex;
@@ -80,16 +94,19 @@
       margin-bottom: 15px;
       letter-spacing: 3px;
       text-align: center;
+      z-index: 1;
     }
     .sub-title {
       font-size: 1.3rem;
       margin-bottom: 25px;
       text-align: center;
+      z-index: 1;
     }
     .welcome {
       font-size: 2rem;
       margin-bottom: 40px;
       text-align: center;
+      z-index: 1;
     }
     .product-gallery {
       display: flex;
@@ -98,6 +115,7 @@
       width: 95%;
       max-width: 500px;
       margin: 20px 0 80px;
+      z-index: 1;
     }
     .product-img {
       width: 100%;
@@ -159,6 +177,7 @@
       border-radius: 20px;
       cursor: pointer;
       transition: all 0.4s;
+      z-index: 1;
     }
     #intro-button:hover {
       background: #FFD700;
@@ -245,7 +264,7 @@
         top: 20px;
         right: 25px;
       }
-      .instagram-logo, .custom-logo, .music-control {
+      .instagram-logo, .custom-logo {
         width: 40px;
         height: 40px;
       }
@@ -254,21 +273,29 @@
         right: 10px;
         top: 12px;
       }
+      .background-logo {
+        width: 80vw;
+        height: 80vw;
+        max-width: 400px;
+        max-height: 400px;
+      }
     }
   </style>
 </head>
 <body>
+
+  <!-- Arka plan logo (tüm sayfalarda sabit) -->
+  <div class="background-logo"></div>
 
   <div class="founder">
     Founder
     <div class="founder-sub">Faruk Can Asker</div>
   </div>
 
-  <!-- Sağ üst ikonlar (Instagram + logo + müzik kontrol) -->
+  <!-- Sağ üst ikonlar -->
   <div class="header-icons">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
     <img src="https://i.imgur.com/KvzGKxo.png" alt="ENKA Logo" class="custom-logo" onclick="openLogoModal()">
-    <div class="music-control" id="musicBtn" onclick="toggleMusic()">♪</div>
   </div>
 
   <!-- Giriş sayfası -->
@@ -276,14 +303,14 @@
     <button id="intro-button">GİRİŞ</button>
   </div>
 
-  <!-- Sayfa 1: Hoşgeldiniz -->
+  <!-- Sayfa 1: Hoşgeldiniz (logo net) -->
   <div id="page1" class="page">
     <div class="title">ENKA</div>
     <div class="sub-title">kuyumculuk</div>
     <div class="welcome">HOŞGELDİNİZ</div>
   </div>
 
-  <!-- Sayfa 2: Pullu Zincir -->
+  <!-- Sayfa 2: Pullu Zincir (logo bulanık) -->
   <div id="page2" class="page">
     <div class="title">Pullu Zincir</div>
     <div class="sub-title">Altın pullu zincir modelleri</div>
@@ -327,13 +354,13 @@
     </div>
   </div>
 
-  <!-- Oklar (altta sabit) -->
+  <!-- Oklar -->
   <div class="arrow-container">
     <div id="prev-arrow" class="arrow-box"><div class="arrow">←</div></div>
     <div id="next-arrow" class="arrow-box"><div class="arrow">→</div></div>
   </div>
 
-  <!-- Normal fotoğraf büyütme modal -->
+  <!-- Fotoğraf büyütme modal -->
   <div id="modal" class="modal" onclick="closeModal()">
     <span class="close" onclick="closeModal()">×</span>
     <img class="modal-content" id="modalImg">
@@ -344,11 +371,6 @@
     <span class="close" onclick="closeLogoModal()">×</span>
     <img class="modal-content" id="logoModalImg" src="https://i.imgur.com/O9LR3Gj.png">
   </div>
-
-  <!-- Arka plan müziği (Idea 10 - Gibran Alcocer, %25 ses) -->
-  <audio id="bgMusic" loop preload="auto">
-    <source src="https://cdn.pixabay.com/audio/2023/08/07/audio_3f9c8c8f8a.mp3" type="audio/mpeg">
-  </audio>
 
   <script>
     const introPage = document.getElementById('intro-page');
@@ -362,40 +384,7 @@
     const prevArrow = document.getElementById('prev-arrow');
     const nextArrow = document.getElementById('next-arrow');
 
-    const bgMusic = document.getElementById('bgMusic');
-    const musicBtn = document.getElementById('musicBtn');
-
     let currentPage = introPage;
-    let musicStarted = false;
-
-    bgMusic.volume = 0.25; // %25 ses
-
-    function startMusic() {
-      if (!musicStarted) {
-        bgMusic.play().catch(e => console.log("Müzik oynatılamadı (kullanıcı etkileşimi lazım):", e));
-        musicStarted = true;
-        musicBtn.textContent = '♪';
-      }
-    }
-
-    function toggleMusic() {
-      if (bgMusic.paused) {
-        bgMusic.play();
-        musicBtn.textContent = '♪';
-      } else {
-        bgMusic.pause();
-        musicBtn.textContent = '🔇';
-      }
-    }
-
-    // Giriş butonuna basınca müzik başlasın
-    introButton.addEventListener('click', () => {
-      showPage(page1);
-      startMusic();
-    });
-
-    // Diğer tıklamalarda da başlasın (güvenli olsun diye)
-    document.addEventListener('click', startMusic, { once: true });
 
     function showPage(targetPage) {
       if (currentPage === targetPage) return;
@@ -403,6 +392,8 @@
       targetPage.style.display = 'flex';
       currentPage = targetPage;
     }
+
+    introButton.addEventListener('click', () => showPage(page1));
 
     nextArrow.addEventListener('click', () => {
       if (currentPage === introPage) showPage(page1);
