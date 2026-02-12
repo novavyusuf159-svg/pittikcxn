@@ -16,7 +16,7 @@
       color: #FFD700;
       font-family: 'Goldman', sans-serif;
       min-height: 100vh;
-      overflow-y: auto; /* Dikey scroll aktif */
+      overflow-y: auto;
       position: relative;
     }
     .founder {
@@ -39,7 +39,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 15vh 5vw 100px; /* Üstten boşluk + alttan oklar için yer */
+      padding: 15vh 5vw 120px; /* Alttan butonlar için yer */
     }
     .page.active {
       display: flex;
@@ -130,7 +130,7 @@
       transform: scale(1.05);
     }
 
-    /* Mobil dik mod optimizasyonu */
+    /* Mobil dik mod */
     @media (orientation: portrait) and (max-width: 768px) {
       .title {
         font-size: 3rem;
