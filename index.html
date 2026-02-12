@@ -19,6 +19,27 @@
       overflow-y: auto;
       position: relative;
     }
+    .header-icons {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 1000;
+    }
+    .instagram-logo, .custom-logo {
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255,215,0,0.4);
+    }
+    .instagram-logo:hover, .custom-logo:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 30px #FFD700;
+    }
     .founder {
       position: fixed;
       top: 10px;
@@ -32,22 +53,6 @@
       font-size: 0.9rem;
       opacity: 0.8;
       margin-top: 3px;
-    }
-    .instagram-logo {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      width: 50px;
-      height: 50px;
-      z-index: 1000;
-      cursor: pointer;
-      transition: all 0.3s;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255,215,0,0.4);
-    }
-    .instagram-logo:hover {
-      transform: scale(1.15);
-      box-shadow: 0 0 30px #FFD700;
     }
     .page {
       display: none;
@@ -232,11 +237,13 @@
         top: 20px;
         right: 25px;
       }
-      .instagram-logo {
+      .instagram-logo, .custom-logo {
         width: 45px;
         height: 45px;
-        top: 12px;
-        right: 12px;
+      }
+      .header-icons {
+        gap: 10px;
+        right: 10px;
       }
     }
   </style>
@@ -248,8 +255,11 @@
     <div class="founder-sub">Faruk Can Asker</div>
   </div>
 
-  <!-- Instagram Logo (sağ üst sabit, senin istediğin klasik siyah-beyaz) -->
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
+  <!-- Sağ üst ikonlar (Instagram + Logo) -->
+  <div class="header-icons">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
+    <img src="https://i.imgur.com/https://imgur.com/Cn73zlU" alt="ENKA Logo" class="custom-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
+  </div>
 
   <!-- Giriş sayfası -->
   <div id="intro-page" class="page active">
