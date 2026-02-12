@@ -245,7 +245,7 @@
         top: 20px;
         right: 25px;
       }
-      .instagram-logo, .custom-logo {
+      .instagram-logo, .custom-logo, .music-control {
         width: 40px;
         height: 40px;
       }
@@ -264,10 +264,11 @@
     <div class="founder-sub">Faruk Can Asker</div>
   </div>
 
-  <!-- Sağ üst ikonlar (Instagram + senin logo) -->
+  <!-- Sağ üst ikonlar (Instagram + logo + müzik kontrol) -->
   <div class="header-icons">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
     <img src="https://i.imgur.com/KvzGKxo.png" alt="ENKA Logo" class="custom-logo" onclick="openLogoModal()">
+    <div class="music-control" id="musicBtn" onclick="toggleMusic()">♪</div>
   </div>
 
   <!-- Giriş sayfası -->
@@ -344,17 +345,10 @@
     <img class="modal-content" id="logoModalImg" src="https://i.imgur.com/O9LR3Gj.png">
   </div>
 
-  <!-- Arka plan müziği (Idea 10 - Gibran Alcocer, sessiz %25) -->
+  <!-- Arka plan müziği (Idea 10 - çok sessiz %25) -->
   <audio id="bgMusic" loop preload="auto">
     <source src="https://cdn.pixabay.com/audio/2023/08/07/audio_3f9c8c8f8a.mp3" type="audio/mpeg">
   </audio>
-
-  <!-- Ses kontrol butonu (sağ üstte) -->
-  <div class="header-icons">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
-    <img src="https://i.imgur.com/KvzGKxo.png" alt="ENKA Logo" class="custom-logo" onclick="openLogoModal()">
-    <div class="music-control" id="musicBtn" onclick="toggleMusic()">♪</div>
-  </div>
 
   <script>
     const introPage = document.getElementById('intro-page');
@@ -372,12 +366,21 @@
     const musicBtn = document.getElementById('musicBtn');
 
     let currentPage = introPage;
+    let musicStarted = false;
 
-    // Müzik otomatik başlar ama çok sessiz (%25)
+    // Müzik seviyesi %25
     bgMusic.volume = 0.25;
-    bgMusic.play().catch(e => console.log("Müzik otomatik oynatılamadı:", e));
 
-    // Müzik aç/kapa butonu
+    // İlk kullanıcı etkileşiminde müzik başlasın (tarayıcı kuralı)
+    function startMusic() {
+      if (!musicStarted) {
+        bgMusic.play().catch(e => console.log("Müzik oynatılamadı:", e));
+        musicStarted = true;
+        musicBtn.textContent = '♪';
+      }
+    }
+
+    // Müzik aç/kapa
     function toggleMusic() {
       if (bgMusic.paused) {
         bgMusic.play();
@@ -388,6 +391,9 @@
       }
     }
 
+    // Herhangi bir tıklamada müzik başlasın (ilk seferde)
+    document.addEventListener('click', startMusic, { once: true });
+
     function showPage(targetPage) {
       if (currentPage === targetPage) return;
       currentPage.style.display = 'none';
@@ -395,7 +401,10 @@
       currentPage = targetPage;
     }
 
-    introButton.addEventListener('click', () => showPage(page1));
+    introButton.addEventListener('click', () => {
+      showPage(page1);
+      startMusic(); // Girişte başlasın
+    });
 
     nextArrow.addEventListener('click', () => {
       if (currentPage === introPage) showPage(page1);
