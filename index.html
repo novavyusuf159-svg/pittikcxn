@@ -5,17 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ENKA Kuyumculuk</title>
   <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap" rel="stylesheet">
-
-  <!-- Favicon ve sosyal medya önizlemesi -->
-  <link rel="icon" href="https://i.imgur.com/HrS318Q.png" type="image/png">
-  <meta property="og:title" content="ENKA Kuyumculuk">
-  <meta property="og:description" content="Altın Pullu Zincir ve Bileklik Modelleri - İstanbul Grand Bazaar">
-  <meta property="og:image" content="https://i.imgur.com/HrS318Q.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:url" content="https://enkakuyumculuk.vercel.app/">
-  <meta property="og:type" content="website">
-
   <style>
     * {
       margin: 0;
@@ -307,6 +296,17 @@
     </div>
   </div>
 
+  <!-- Sayfa 4: Küpeler (senin fotoğrafların eklendi) -->
+  <div id="page4" class="page">
+    <div class="title">Küpeler</div>
+    <div class="sub-title">Altın küpe modelleri</div>
+    <div class="product-gallery">
+      <img src="https://i.imgur.com/is1dFof.png" alt="Küpe 1" class="product-img" onclick="openModal(this.src)">
+      <img src="https://i.imgur.com/ECQbMMI.png" alt="Küpe 2" class="product-img" onclick="openModal(this.src)">
+      <img src="https://i.imgur.com/eZYFQdU.png" alt="Küpe 3" class="product-img" onclick="openModal(this.src)">
+    </div>
+  </div>
+
   <!-- Oklar (altta sabit) -->
   <div class="arrow-container">
     <div id="prev-arrow" class="arrow-box"><div class="arrow">←</div></div>
@@ -330,6 +330,7 @@
     const page1 = document.getElementById('page1');
     const page2 = document.getElementById('page2');
     const page3 = document.getElementById('page3');
+    const page4 = document.getElementById('page4');
 
     const introButton = document.getElementById('intro-button');
     const prevArrow = document.getElementById('prev-arrow');
@@ -350,10 +351,12 @@
       if (currentPage === introPage) showPage(page1);
       else if (currentPage === page1) showPage(page2);
       else if (currentPage === page2) showPage(page3);
+      else if (currentPage === page3) showPage(page4);
     });
 
     prevArrow.addEventListener('click', () => {
-      if (currentPage === page3) showPage(page2);
+      if (currentPage === page4) showPage(page3);
+      else if (currentPage === page3) showPage(page2);
       else if (currentPage === page2) showPage(page1);
       else if (currentPage === page1) showPage(introPage);
     });
