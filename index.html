@@ -19,26 +19,15 @@
       overflow-y: auto;
       position: relative;
     }
-    .background-logo {
+    /* Altın partikül arka plan */
+    canvas#particles-js {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 70vw;
-      height: 70vw;
-      max-width: 700px;
-      max-height: 700px;
-      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
       pointer-events: none;
-      background: url('https://i.imgur.com/S91AmWi.png') center/cover no-repeat;
-      border-radius: 50%;
-      transition: filter 0.6s ease;
-    }
-    .page:not(#page1) .background-logo {
-      filter: blur(15px) brightness(0.4); /* Diğer sayfalarda bulanık ve koyu */
-    }
-    .page#page1 .background-logo {
-      filter: none; /* Hoşgeldiniz'de net */
     }
     .founder {
       position: fixed;
@@ -48,6 +37,8 @@
       font-weight: 700;
       color: #FFD700;
       z-index: 100;
+      text-shadow: 0 0 10px #FFD700;
+      animation: pulseGlow 4s infinite alternate;
     }
     .founder-sub {
       font-size: 0.85rem;
@@ -67,13 +58,14 @@
       width: 45px;
       height: 45px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.4s ease;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(255,215,0,0.4);
+      animation: pulseGlow 5s infinite alternate;
     }
     .instagram-logo:hover, .custom-logo:hover {
-      transform: scale(1.12);
-      box-shadow: 0 0 25px #FFD700;
+      transform: scale(1.15) rotate(5deg);
+      box-shadow: 0 0 35px #FFD700;
     }
     .page {
       display: none;
@@ -83,6 +75,7 @@
       justify-content: flex-start;
       padding: 15vh 5vw 140px;
       position: relative;
+      z-index: 1;
     }
     .page.active {
       display: flex;
@@ -94,19 +87,20 @@
       margin-bottom: 15px;
       letter-spacing: 3px;
       text-align: center;
-      z-index: 1;
+      text-shadow: 0 0 15px #FFD700;
+      animation: pulseGlow 6s infinite alternate;
     }
     .sub-title {
       font-size: 1.3rem;
       margin-bottom: 25px;
       text-align: center;
-      z-index: 1;
+      text-shadow: 0 0 10px #FFD700;
     }
     .welcome {
       font-size: 2rem;
       margin-bottom: 40px;
       text-align: center;
-      z-index: 1;
+      text-shadow: 0 0 10px #FFD700;
     }
     .product-gallery {
       display: flex;
@@ -115,19 +109,36 @@
       width: 95%;
       max-width: 500px;
       margin: 20px 0 80px;
-      z-index: 1;
     }
     .product-img {
       width: 100%;
       border: 4px solid #FFD700;
       border-radius: 15px;
-      box-shadow: 0 0 20px #FFD700;
+      box-shadow: 0 0 20px rgba(255,215,0,0.3);
       object-fit: cover;
       cursor: pointer;
-      transition: transform 0.3s;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
     }
     .product-img:hover {
-      transform: scale(1.03);
+      transform: scale(1.08);
+      box-shadow: 0 0 40px #FFD700;
+      border-color: #fff;
+    }
+    .product-img::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,215,0,0.2) 50%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .product-img:hover::after {
+      opacity: 1;
     }
     .arrow-container {
       position: fixed;
@@ -150,16 +161,19 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.4s ease;
       box-shadow: 0 0 15px #FFD700;
+      animation: pulseGlow 4s infinite alternate;
     }
     .arrow-box:hover {
-      background: rgba(255,215,0,0.3);
-      transform: scale(1.2);
+      background: rgba(255,215,0,0.2);
+      transform: scale(1.15) translateY(-5px);
+      box-shadow: 0 15px 30px rgba(255,215,0,0.5);
     }
     .arrow {
       font-size: 3rem;
       color: #FFD700;
+      text-shadow: 0 0 10px #FFD700;
     }
     #intro-page {
       display: flex;
@@ -171,18 +185,20 @@
     #intro-button {
       padding: 20px 80px;
       font-size: 3rem;
-      background: #000;
+      background: linear-gradient(135deg, #000, #1a1a00);
       color: #FFD700;
       border: 6px solid #FFD700;
       border-radius: 20px;
       cursor: pointer;
-      transition: all 0.4s;
-      z-index: 1;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 20px rgba(255,215,0,0.5);
+      animation: pulseGlow 5s infinite alternate;
     }
     #intro-button:hover {
-      background: #FFD700;
+      background: linear-gradient(135deg, #FFD700, #ffea80);
       color: #000;
-      transform: scale(1.05);
+      transform: scale(1.08) translateY(-5px);
+      box-shadow: 0 15px 40px rgba(255,215,0,0.7);
     }
 
     /* Fotoğraf büyütme modal */
@@ -231,6 +247,12 @@
       text-shadow: 0 0 30px #FFD700;
     }
 
+    /* Nabız atan altın glow animasyonu */
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 10px #FFD700; box-shadow: 0 0 10px #FFD700; }
+      100% { text-shadow: 0 0 25px #FFD700; box-shadow: 0 0 30px #FFD700; }
+    }
+
     /* Mobil dik mod */
     @media (max-width: 768px) {
       .title {
@@ -264,7 +286,7 @@
         top: 20px;
         right: 25px;
       }
-      .instagram-logo, .custom-logo {
+      .instagram-logo, .custom-logo, .music-control {
         width: 40px;
         height: 40px;
       }
@@ -273,19 +295,13 @@
         right: 10px;
         top: 12px;
       }
-      .background-logo {
-        width: 80vw;
-        height: 80vw;
-        max-width: 400px;
-        max-height: 400px;
-      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Arka plan logo (tüm sayfalarda sabit) -->
-  <div class="background-logo"></div>
+  <!-- Altın partikül arka plan -->
+  <canvas id="particles-js"></canvas>
 
   <div class="founder">
     Founder
@@ -303,14 +319,14 @@
     <button id="intro-button">GİRİŞ</button>
   </div>
 
-  <!-- Sayfa 1: Hoşgeldiniz (logo net) -->
+  <!-- Sayfa 1: Hoşgeldiniz -->
   <div id="page1" class="page">
     <div class="title">ENKA</div>
     <div class="sub-title">kuyumculuk</div>
     <div class="welcome">HOŞGELDİNİZ</div>
   </div>
 
-  <!-- Sayfa 2: Pullu Zincir (logo bulanık) -->
+  <!-- Sayfa 2: Pullu Zincir -->
   <div id="page2" class="page">
     <div class="title">Pullu Zincir</div>
     <div class="sub-title">Altın pullu zincir modelleri</div>
@@ -371,6 +387,53 @@
     <span class="close" onclick="closeLogoModal()">×</span>
     <img class="modal-content" id="logoModalImg" src="https://i.imgur.com/O9LR3Gj.png">
   </div>
+
+  <!-- Particles.js kütüphanesi (altın partikül için) -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 40,
+          "density": { "enable": true, "value_area": 800 }
+        },
+        "color": { "value": "#FFD700" },
+        "shape": { "type": "circle" },
+        "opacity": {
+          "value": 0.4,
+          "random": true,
+          "anim": { "enable": true, "speed": 1, "opacity_min": 0.1 }
+        },
+        "size": {
+          "value": 3,
+          "random": true,
+          "anim": { "enable": false }
+        },
+        "line_linked": {
+          "enable": false
+        },
+        "move": {
+          "enable": true,
+          "speed": 0.8,
+          "direction": "none",
+          "random": true,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": { "enable": false }
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": { "enable": false },
+          "onclick": { "enable": false },
+          "resize": true
+        }
+      },
+      "retina_detect": true
+    });
+  </script>
 
   <script>
     const introPage = document.getElementById('intro-page');
