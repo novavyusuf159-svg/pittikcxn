@@ -21,15 +21,15 @@
     }
     .founder {
       position: fixed;
-      top: 10px;
+      top: 15px;
       left: 15px;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: #FFD700;
       z-index: 100;
     }
     .founder-sub {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       opacity: 0.8;
       margin-top: 3px;
     }
@@ -39,37 +39,20 @@
       right: 15px;
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
       z-index: 1000;
     }
     .instagram-logo, .custom-logo {
-      width: 50px;
-      height: 50px;
+      width: 45px;
+      height: 45px;
       cursor: pointer;
       transition: all 0.3s;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255,215,0,0.4);
+      box-shadow: 0 0 15px rgba(255,215,0,0.4);
     }
     .instagram-logo:hover, .custom-logo:hover {
-      transform: scale(1.15);
-      box-shadow: 0 0 30px #FFD700;
-    }
-    .bottom-left-logo {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      width: 80px;
-      height: 80px;
-      z-index: 999;
-      cursor: pointer;
-      transition: all 0.3s;
-      border-radius: 50%;
-      border: 4px solid #FFD700;
-      box-shadow: 0 0 25px rgba(255,215,0,0.5);
-    }
-    .bottom-left-logo:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 40px #FFD700;
+      transform: scale(1.12);
+      box-shadow: 0 0 25px #FFD700;
     }
     .page {
       display: none;
@@ -175,7 +158,7 @@
       transform: scale(1.05);
     }
 
-    /* Fotoğraf büyütme modal (normal fotoğraflar için) */
+    /* Fotoğraf büyütme modal */
     .modal {
       display: none;
       position: fixed;
@@ -255,17 +238,13 @@
         right: 25px;
       }
       .instagram-logo, .custom-logo {
-        width: 45px;
-        height: 45px;
+        width: 40px;
+        height: 40px;
       }
       .header-icons {
         gap: 10px;
         right: 10px;
-      }
-      .bottom-center-logo {
-        width: 70px;
-        height: 70px;
-        bottom: 15px;
+        top: 12px;
       }
     }
   </style>
@@ -277,14 +256,11 @@
     <div class="founder-sub">Faruk Can Asker</div>
   </div>
 
-  <!-- Sağ üst ikonlar (Instagram + eski logo) -->
+  <!-- Sağ üst ikonlar (Instagram + senin yeni logo) -->
   <div class="header-icons">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
-    <img src="https://i.imgur.com/Cn73zlU.png" alt="ENKA Logo" class="custom-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
+    <img src="https://i.imgur.com/KvzGKxo.png" alt="ENKA Logo" class="custom-logo" onclick="window.open('https://imgur.com/O9LR3Gj', '_blank')">
   </div>
-
-  <!-- En altta ortada sabit logo (tıklayınca özel fotoğraf modalı) -->
-  <img src="https://i.imgur.com/KvzGKxo.png" alt="ENKA Logo" class="bottom-center-logo" onclick="openLogoModal()">
 
   <!-- Giriş sayfası -->
   <div id="intro-page" class="page active">
@@ -326,16 +302,10 @@
     <div id="next-arrow" class="arrow-box"><div class="arrow">→</div></div>
   </div>
 
-  <!-- Normal fotoğraf büyütme modal -->
+  <!-- Fotoğraf büyütme modal -->
   <div id="modal" class="modal" onclick="closeModal()">
     <span class="close" onclick="closeModal()">×</span>
     <img class="modal-content" id="modalImg">
-  </div>
-
-  <!-- Logo tıklayınca çıkan özel modal (senin attığın fotoğraf) -->
-  <div id="logoModal" class="modal" onclick="closeLogoModal()">
-    <span class="close" onclick="closeLogoModal()">×</span>
-    <img class="modal-content" id="logoModalImg" src="https://i.imgur.com/O9LR3Gj.png">
   </div>
 
   <script>
@@ -371,7 +341,6 @@
       else if (currentPage === page1) showPage(introPage);
     });
 
-    // Normal fotoğraf modalı
     function openModal(src) {
       const modal = document.getElementById('modal');
       const modalImg = document.getElementById('modalImg');
@@ -381,15 +350,6 @@
 
     function closeModal() {
       document.getElementById('modal').style.display = 'none';
-    }
-
-    // Logo tıklayınca çıkan özel modal
-    function openLogoModal() {
-      document.getElementById('logoModal').style.display = 'flex';
-    }
-
-    function closeLogoModal() {
-      document.getElementById('logoModal').style.display = 'none';
     }
   </script>
 </body>
