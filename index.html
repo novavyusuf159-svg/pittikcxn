@@ -345,7 +345,7 @@
     <img class="modal-content" id="logoModalImg" src="https://i.imgur.com/O9LR3Gj.png">
   </div>
 
-  <!-- Arka plan müziği (Idea 10 - çok sessiz %25) -->
+  <!-- Arka plan müziği (Idea 10 - Gibran Alcocer, %25 ses) -->
   <audio id="bgMusic" loop preload="auto">
     <source src="https://cdn.pixabay.com/audio/2023/08/07/audio_3f9c8c8f8a.mp3" type="audio/mpeg">
   </audio>
@@ -368,19 +368,16 @@
     let currentPage = introPage;
     let musicStarted = false;
 
-    // Müzik seviyesi %25
-    bgMusic.volume = 0.25;
+    bgMusic.volume = 0.25; // %25 ses
 
-    // İlk kullanıcı etkileşiminde müzik başlasın (tarayıcı kuralı)
     function startMusic() {
       if (!musicStarted) {
-        bgMusic.play().catch(e => console.log("Müzik oynatılamadı:", e));
+        bgMusic.play().catch(e => console.log("Müzik oynatılamadı (kullanıcı etkileşimi lazım):", e));
         musicStarted = true;
         musicBtn.textContent = '♪';
       }
     }
 
-    // Müzik aç/kapa
     function toggleMusic() {
       if (bgMusic.paused) {
         bgMusic.play();
@@ -391,7 +388,13 @@
       }
     }
 
-    // Herhangi bir tıklamada müzik başlasın (ilk seferde)
+    // Giriş butonuna basınca müzik başlasın
+    introButton.addEventListener('click', () => {
+      showPage(page1);
+      startMusic();
+    });
+
+    // Diğer tıklamalarda da başlasın (güvenli olsun diye)
     document.addEventListener('click', startMusic, { once: true });
 
     function showPage(targetPage) {
@@ -400,11 +403,6 @@
       targetPage.style.display = 'flex';
       currentPage = targetPage;
     }
-
-    introButton.addEventListener('click', () => {
-      showPage(page1);
-      startMusic(); // Girişte başlasın
-    });
 
     nextArrow.addEventListener('click', () => {
       if (currentPage === introPage) showPage(page1);
