@@ -42,10 +42,11 @@
       z-index: 1000;
       cursor: pointer;
       transition: all 0.3s;
-      box-shadow: 0 0 20px rgba(255,215,0,0.6);
+      filter: brightness(0) saturate(100%) invert(70%) sepia(100%) saturate(500%) hue-rotate(0deg) brightness(110%) contrast(120%);
     }
     .instagram-logo:hover {
       transform: scale(1.15);
+      filter: brightness(0) saturate(100%) invert(90%) sepia(100%) saturate(600%) hue-rotate(0deg) brightness(120%) contrast(140%);
       box-shadow: 0 0 30px #FFD700;
     }
     .page {
@@ -152,7 +153,7 @@
       transform: scale(1.05);
     }
 
-    /* Fotoğraf büyütme modal - Şık versiyon */
+    /* Fotoğraf büyütme modal */
     .modal {
       display: none;
       position: fixed;
@@ -198,7 +199,7 @@
       text-shadow: 0 0 30px #FFD700;
     }
 
-    /* Mobil dik mod optimizasyonu */
+    /* Mobil dik mod */
     @media (max-width: 768px) {
       .title {
         font-size: 2.8rem;
@@ -247,7 +248,7 @@
     <div class="founder-sub">Faruk Can Asker</div>
   </div>
 
-  <!-- Instagram Logo (sağ üst sabit) -->
+  <!-- Instagram Logo (sağ üst sabit, altın sarısı) -->
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
 
   <!-- Giriş sayfası -->
@@ -262,7 +263,7 @@
     <div class="welcome">HOŞGELDİNİZ</div>
   </div>
 
-  <!-- Sayfa 2: Pullu Zincir (3 zincir fotoğrafı alt alta) -->
+  <!-- Sayfa 2: Pullu Zincir -->
   <div id="page2" class="page">
     <div class="title">Pullu Zincir</div>
     <div class="sub-title">Altın pullu zincir modelleri</div>
@@ -273,7 +274,7 @@
     </div>
   </div>
 
-  <!-- Sayfa 3: Pullu Bileklik (3 bileklik fotoğrafı alt alta) -->
+  <!-- Sayfa 3: Pullu Bileklik -->
   <div id="page3" class="page">
     <div class="title">Pullu Bileklik</div>
     <div class="sub-title">Altın pullu bileklik modelleri</div>
@@ -284,7 +285,7 @@
     </div>
   </div>
 
-  <!-- Oklar (altta sabit, büyük) -->
+  <!-- Oklar (altta sabit) -->
   <div class="arrow-container">
     <div id="prev-arrow" class="arrow-box"><div class="arrow">←</div></div>
     <div id="next-arrow" class="arrow-box"><div class="arrow">→</div></div>
@@ -296,6 +297,11 @@
     <img class="modal-content" id="modalImg">
   </div>
 
+  <!-- Rahatlatıcı tıklama sesi (her buton/ok tıklamasında çalıyor) -->
+  <audio id="clickSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-magic-sparkle-whoosh-2345.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
     const introPage = document.getElementById('intro-page');
     const page1 = document.getElementById('page1');
@@ -306,27 +312,41 @@
     const prevArrow = document.getElementById('prev-arrow');
     const nextArrow = document.getElementById('next-arrow');
 
+    const clickSound = document.getElementById('clickSound');
+
     let currentPage = introPage;
+
+    // Tıklama sesini çal
+    function playClick() {
+      clickSound.currentTime = 0;
+      clickSound.play().catch(e => console.log("Ses oynatılamadı:", e));
+    }
 
     function showPage(targetPage) {
       if (currentPage === targetPage) return;
       currentPage.style.display = 'none';
       targetPage.style.display = 'flex';
       currentPage = targetPage;
+      playClick(); // Sayfa değişirken ses çal
     }
 
-    introButton.addEventListener('click', () => showPage(page1));
+    introButton.addEventListener('click', () => {
+      showPage(page1);
+      playClick();
+    });
 
     nextArrow.addEventListener('click', () => {
       if (currentPage === introPage) showPage(page1);
       else if (currentPage === page1) showPage(page2);
       else if (currentPage === page2) showPage(page3);
+      playClick();
     });
 
     prevArrow.addEventListener('click', () => {
       if (currentPage === page3) showPage(page2);
       else if (currentPage === page2) showPage(page1);
       else if (currentPage === page1) showPage(introPage);
+      playClick();
     });
 
     // Fotoğraf büyütme
@@ -335,10 +355,12 @@
       const modalImg = document.getElementById('modalImg');
       modalImg.src = src;
       modal.style.display = 'flex';
+      playClick(); // Modal açılırken de ses çal
     }
 
     function closeModal() {
       document.getElementById('modal').style.display = 'none';
+      playClick();
     }
   </script>
 </body>
