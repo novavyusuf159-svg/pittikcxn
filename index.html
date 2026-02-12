@@ -42,7 +42,7 @@
       gap: 12px;
       z-index: 1000;
     }
-    .instagram-logo, .custom-logo {
+    .instagram-logo, .custom-logo, .music-control {
       width: 45px;
       height: 45px;
       cursor: pointer;
@@ -50,9 +50,17 @@
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(255,215,0,0.4);
     }
-    .instagram-logo:hover, .custom-logo:hover {
+    .instagram-logo:hover, .custom-logo:hover, .music-control:hover {
       transform: scale(1.12);
       box-shadow: 0 0 25px #FFD700;
+    }
+    .music-control {
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #FFD700;
     }
     .page {
       display: none;
@@ -296,7 +304,7 @@
     </div>
   </div>
 
-  <!-- Yeni Sayfa 4: Küpeler -->
+  <!-- Sayfa 4: Küpeler -->
   <div id="page4" class="page">
     <div class="title">Küpeler</div>
     <div class="sub-title">Altın küpe modelleri</div>
@@ -307,7 +315,7 @@
     </div>
   </div>
 
-  <!-- Yeni Sayfa 5: Farklı Pullu Modelleri (senin attığın 3 fotoğraf alt alta) -->
+  <!-- Sayfa 5: Farklı Pullu Modelleri -->
   <div id="page5" class="page">
     <div class="title">Farklı Pullu Modelleri</div>
     <div class="sub-title">Özel pullu takı modelleri</div>
@@ -336,6 +344,18 @@
     <img class="modal-content" id="logoModalImg" src="https://i.imgur.com/O9LR3Gj.png">
   </div>
 
+  <!-- Arka plan müziği (Idea 10 - Gibran Alcocer, sessiz %25) -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="https://cdn.pixabay.com/audio/2023/08/07/audio_3f9c8c8f8a.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Ses kontrol butonu (sağ üstte) -->
+  <div class="header-icons">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
+    <img src="https://i.imgur.com/KvzGKxo.png" alt="ENKA Logo" class="custom-logo" onclick="openLogoModal()">
+    <div class="music-control" id="musicBtn" onclick="toggleMusic()">♪</div>
+  </div>
+
   <script>
     const introPage = document.getElementById('intro-page');
     const page1 = document.getElementById('page1');
@@ -348,7 +368,25 @@
     const prevArrow = document.getElementById('prev-arrow');
     const nextArrow = document.getElementById('next-arrow');
 
+    const bgMusic = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+
     let currentPage = introPage;
+
+    // Müzik otomatik başlar ama çok sessiz (%25)
+    bgMusic.volume = 0.25;
+    bgMusic.play().catch(e => console.log("Müzik otomatik oynatılamadı:", e));
+
+    // Müzik aç/kapa butonu
+    function toggleMusic() {
+      if (bgMusic.paused) {
+        bgMusic.play();
+        musicBtn.textContent = '♪';
+      } else {
+        bgMusic.pause();
+        musicBtn.textContent = '🔇';
+      }
+    }
 
     function showPage(targetPage) {
       if (currentPage === targetPage) return;
