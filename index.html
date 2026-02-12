@@ -76,16 +76,9 @@
       padding: 15vh 5vw 140px;
       position: relative;
       z-index: 1;
-      opacity: 0;
-      transition: opacity 0.8s ease, transform 0.8s ease;
     }
     .page.active {
       display: flex;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .page:not(.active) {
-      transform: translateY(20px);
     }
     .title {
       font-size: 3.5rem;
@@ -96,21 +89,18 @@
       text-align: center;
       text-shadow: 0 0 15px #FFD700;
       animation: pulseGlow 6s infinite alternate;
-      z-index: 1;
     }
     .sub-title {
       font-size: 1.3rem;
       margin-bottom: 25px;
       text-align: center;
       text-shadow: 0 0 10px #FFD700;
-      z-index: 1;
     }
     .welcome {
       font-size: 2rem;
       margin-bottom: 40px;
       text-align: center;
       text-shadow: 0 0 10px #FFD700;
-      z-index: 1;
     }
     .product-gallery {
       display: flex;
@@ -119,7 +109,6 @@
       width: 95%;
       max-width: 500px;
       margin: 20px 0 80px;
-      z-index: 1;
     }
     .product-img {
       width: 100%;
@@ -131,10 +120,9 @@
       transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
-      transform: perspective(1000px) rotateY(0deg);
     }
     .product-img:hover {
-      transform: perspective(1000px) rotateY(5deg) scale(1.08);
+      transform: scale(1.08);
       box-shadow: 0 0 40px #FFD700;
       border-color: #fff;
     }
@@ -145,10 +133,9 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: linear-gradient(135deg, transparent 40%, rgba(255,215,0,0.3) 50%, transparent 60%);
+      background: linear-gradient(135deg, transparent 40%, rgba(255,215,0,0.2) 50%, transparent 60%);
       opacity: 0;
-      transition: opacity 0.6s;
-      pointer-events: none;
+      transition: opacity 0.5s;
     }
     .product-img:hover::after {
       opacity: 1;
@@ -181,10 +168,7 @@
     .arrow-box:hover {
       background: rgba(255,215,0,0.2);
       transform: scale(1.15) translateY(-5px);
-      box-shadow: 0 15px 40px rgba(255,215,0,0.7);
-    }
-    .arrow-box:active {
-      transform: scale(0.95) translateY(0);
+      box-shadow: 0 15px 30px rgba(255,215,0,0.5);
     }
     .arrow {
       font-size: 3rem;
@@ -209,16 +193,12 @@
       transition: all 0.4s ease;
       box-shadow: 0 0 20px rgba(255,215,0,0.5);
       animation: pulseGlow 5s infinite alternate;
-      z-index: 1;
     }
     #intro-button:hover {
       background: linear-gradient(135deg, #FFD700, #ffea80);
       color: #000;
       transform: scale(1.08) translateY(-5px);
       box-shadow: 0 15px 40px rgba(255,215,0,0.7);
-    }
-    #intro-button:active {
-      transform: scale(0.95) translateY(0);
     }
 
     /* Fotoğraf büyütme modal */
@@ -408,36 +388,50 @@
     <img class="modal-content" id="logoModalImg" src="https://i.imgur.com/O9LR3Gj.png">
   </div>
 
-  <!-- Particles.js (altın partikül) -->
+  <!-- Particles.js kütüphanesi (altın partikül için) -->
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
-      particles: {
-        number: { value: 50, density: { enable: true, value_area: 800 } },
-        color: { value: "#FFD700" },
-        shape: { type: "circle" },
-        opacity: { value: 0.3, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1 } },
-        size: { value: 2.5, random: true, anim: { enable: false } },
-        line_linked: { enable: false },
-        move: {
-          enable: true,
-          speed: 0.6,
-          direction: "none",
-          random: true,
-          straight: false,
-          out_mode: "out",
-          bounce: false
+      "particles": {
+        "number": {
+          "value": 40,
+          "density": { "enable": true, "value_area": 800 }
+        },
+        "color": { "value": "#FFD700" },
+        "shape": { "type": "circle" },
+        "opacity": {
+          "value": 0.4,
+          "random": true,
+          "anim": { "enable": true, "speed": 1, "opacity_min": 0.1 }
+        },
+        "size": {
+          "value": 3,
+          "random": true,
+          "anim": { "enable": false }
+        },
+        "line_linked": {
+          "enable": false
+        },
+        "move": {
+          "enable": true,
+          "speed": 0.8,
+          "direction": "none",
+          "random": true,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": { "enable": false }
         }
       },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: false },
-          onclick: { enable: false },
-          resize: true
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": { "enable": false },
+          "onclick": { "enable": false },
+          "resize": true
         }
       },
-      retina_detect: true
+      "retina_detect": true
     });
   </script>
 
