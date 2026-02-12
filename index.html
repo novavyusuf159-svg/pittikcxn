@@ -259,7 +259,7 @@
   <!-- Sağ üst ikonlar (Instagram + senin yeni logo) -->
   <div class="header-icons">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
-    <img src="https://i.imgur.com/KvzGKxo.png" alt="ENKA Logo" class="custom-logo" onclick="window.open('https://imgur.com/O9LR3Gj', '_blank')">
+    <img src="https://i.imgur.com/KvzGKxo.png" alt="ENKA Logo" class="custom-logo" onclick="openLogoModal()">
   </div>
 
   <!-- Giriş sayfası -->
@@ -302,10 +302,16 @@
     <div id="next-arrow" class="arrow-box"><div class="arrow">→</div></div>
   </div>
 
-  <!-- Fotoğraf büyütme modal -->
+  <!-- Normal fotoğraf büyütme modal -->
   <div id="modal" class="modal" onclick="closeModal()">
     <span class="close" onclick="closeModal()">×</span>
     <img class="modal-content" id="modalImg">
+  </div>
+
+  <!-- Logo tıklayınca çıkan özel modal (senin attığın fotoğraf) -->
+  <div id="logoModal" class="modal" onclick="closeLogoModal()">
+    <span class="close" onclick="closeLogoModal()">×</span>
+    <img class="modal-content" id="logoModalImg" src="https://i.imgur.com/O9LR3Gj.png">
   </div>
 
   <script>
@@ -350,6 +356,14 @@
 
     function closeModal() {
       document.getElementById('modal').style.display = 'none';
+    }
+
+    function openLogoModal() {
+      document.getElementById('logoModal').style.display = 'flex';
+    }
+
+    function closeLogoModal() {
+      document.getElementById('logoModal').style.display = 'none';
     }
   </script>
 </body>
