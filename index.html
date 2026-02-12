@@ -54,13 +54,12 @@
       transform: scale(1.15);
       box-shadow: 0 0 30px #FFD700;
     }
-    .bottom-center-logo {
+    .bottom-left-logo {
       position: fixed;
       bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90px;
-      height: 90px;
+      left: 20px;
+      width: 80px;
+      height: 80px;
       z-index: 999;
       cursor: pointer;
       transition: all 0.3s;
@@ -68,8 +67,8 @@
       border: 4px solid #FFD700;
       box-shadow: 0 0 25px rgba(255,215,0,0.5);
     }
-    .bottom-center-logo:hover {
-      transform: translateX(-50%) scale(1.1);
+    .bottom-left-logo:hover {
+      transform: scale(1.1);
       box-shadow: 0 0 40px #FFD700;
     }
     .page {
@@ -78,7 +77,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 15vh 5vw 160px; /* Alttan logo için ekstra boşluk */
+      padding: 15vh 5vw 140px;
     }
     .page.active {
       display: flex;
@@ -176,7 +175,7 @@
       transform: scale(1.05);
     }
 
-    /* Fotoğraf büyütme modal */
+    /* Fotoğraf büyütme modal (normal fotoğraflar için) */
     .modal {
       display: none;
       position: fixed;
@@ -255,7 +254,7 @@
         top: 20px;
         right: 25px;
       }
-      .instagram-logo, .custom-logo, .bottom-logo {
+      .instagram-logo, .custom-logo {
         width: 45px;
         height: 45px;
       }
@@ -263,10 +262,10 @@
         gap: 10px;
         right: 10px;
       }
-      .bottom-logo {
-        bottom: 15px;
+      .bottom-center-logo {
         width: 70px;
         height: 70px;
+        bottom: 15px;
       }
     }
   </style>
@@ -278,14 +277,14 @@
     <div class="founder-sub">Faruk Can Asker</div>
   </div>
 
-  <!-- Sağ üst ikonlar (Instagram + ENKA Logo) -->
+  <!-- Sağ üst ikonlar (Instagram + eski logo) -->
   <div class="header-icons">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
     <img src="https://i.imgur.com/Cn73zlU.png" alt="ENKA Logo" class="custom-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
   </div>
 
-  <!-- En altta sabit logo (tıklayınca fotoğraf modalı) -->
-  <img src="https://i.imgur.com/Cn73zlU.png" alt="ENKA Jewellery Logo" class="bottom-logo" onclick="openBottomModal()">
+  <!-- En altta ortada sabit logo (tıklayınca özel fotoğraf modalı) -->
+  <img src="https://i.imgur.com/KvzGKxo.png" alt="ENKA Logo" class="bottom-center-logo" onclick="openLogoModal()">
 
   <!-- Giriş sayfası -->
   <div id="intro-page" class="page active">
@@ -327,16 +326,16 @@
     <div id="next-arrow" class="arrow-box"><div class="arrow">→</div></div>
   </div>
 
-  <!-- Fotoğraf büyütme modal (normal fotoğraflar için) -->
+  <!-- Normal fotoğraf büyütme modal -->
   <div id="modal" class="modal" onclick="closeModal()">
     <span class="close" onclick="closeModal()">×</span>
     <img class="modal-content" id="modalImg">
   </div>
 
   <!-- Logo tıklayınca çıkan özel modal (senin attığın fotoğraf) -->
-  <div id="bottomModal" class="modal" onclick="closeBottomModal()">
-    <span class="close" onclick="closeBottomModal()">×</span>
-    <img class="modal-content" id="bottomModalImg" src="https://i.imgur.com/O9LR3Gj.png">
+  <div id="logoModal" class="modal" onclick="closeLogoModal()">
+    <span class="close" onclick="closeLogoModal()">×</span>
+    <img class="modal-content" id="logoModalImg" src="https://i.imgur.com/O9LR3Gj.png">
   </div>
 
   <script>
@@ -385,12 +384,12 @@
     }
 
     // Logo tıklayınca çıkan özel modal
-    function openBottomModal() {
-      document.getElementById('bottomModal').style.display = 'flex';
+    function openLogoModal() {
+      document.getElementById('logoModal').style.display = 'flex';
     }
 
-    function closeBottomModal() {
-      document.getElementById('bottomModal').style.display = 'none';
+    function closeLogoModal() {
+      document.getElementById('logoModal').style.display = 'none';
     }
   </script>
 </body>
