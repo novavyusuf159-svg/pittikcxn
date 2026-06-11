@@ -1,497 +1,574 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ENKA Kuyumculuk</title>
-  <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enka Kuyumculuk – Çemberlitaş, İstanbul</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #F2EDE6;
+      --bg2:     #EAE3D9;
+      --ink:     #1C1C1C;
+      --ink2:    #4A4540;
+      --accent:  #8B6914;
+      --accent2: #C49A27;
+      --warm:    #D4B483;
+      --white:   #FAF8F5;
+      --border:  rgba(139,105,20,0.18);
     }
-    body {
-      background: #000;
-      color: #FFD700;
-      font-family: 'Goldman', sans-serif;
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4rem;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { text-decoration: none; display: flex; flex-direction: column; }
+    .logo-main { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--ink); letter-spacing: 0.08em; }
+    .logo-sub  { font-size: 0.6rem; color: var(--ink2); letter-spacing: 0.25em; text-transform: uppercase; margin-top: 1px; opacity: 0.6; }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a { color: var(--ink2); text-decoration: none; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 400; transition: color .2s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
       min-height: 100vh;
-      overflow-y: auto;
-      position: relative;
+      display: grid; grid-template-columns: 1fr 1fr;
+      padding-top: 64px;
     }
-    /* Altın partikül arka plan */
-    canvas#particles-js {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      pointer-events: none;
+    .hero-left {
+      background: var(--ink);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 6rem 5rem;
+      position: relative; overflow: hidden;
     }
-    .founder {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #FFD700;
-      z-index: 100;
-      text-shadow: 0 0 10px #FFD700;
-      animation: pulseGlow 4s infinite alternate;
-    }
-    .founder-sub {
-      font-size: 0.85rem;
-      opacity: 0.8;
-      margin-top: 3px;
-    }
-    .header-icons {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      z-index: 1000;
-    }
-    .instagram-logo, .custom-logo {
-      width: 45px;
-      height: 45px;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(255,215,0,0.4);
-      animation: pulseGlow 5s infinite alternate;
-    }
-    .instagram-logo:hover, .custom-logo:hover {
-      transform: scale(1.15) rotate(5deg);
-      box-shadow: 0 0 35px #FFD700;
-    }
-    .page {
-      display: none;
-      min-height: 100vh;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 15vh 5vw 140px;
-      position: relative;
-      z-index: 1;
-    }
-    .page.active {
-      display: flex;
-    }
-    .title {
-      font-size: 3.5rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 15px;
-      letter-spacing: 3px;
-      text-align: center;
-      text-shadow: 0 0 15px #FFD700;
-      animation: pulseGlow 6s infinite alternate;
-    }
-    .sub-title {
-      font-size: 1.3rem;
-      margin-bottom: 25px;
-      text-align: center;
-      text-shadow: 0 0 10px #FFD700;
-    }
-    .welcome {
-      font-size: 2rem;
-      margin-bottom: 40px;
-      text-align: center;
-      text-shadow: 0 0 10px #FFD700;
-    }
-    .product-gallery {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-      width: 95%;
-      max-width: 500px;
-      margin: 20px 0 80px;
-    }
-    .product-img {
-      width: 100%;
-      border: 4px solid #FFD700;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(255,215,0,0.3);
-      object-fit: cover;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .product-img:hover {
-      transform: scale(1.08);
-      box-shadow: 0 0 40px #FFD700;
-      border-color: #fff;
-    }
-    .product-img::after {
+    .hero-left::before {
       content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(135deg, transparent 40%, rgba(255,215,0,0.2) 50%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.5s;
+      position: absolute; top: -80px; right: -80px;
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      border: 1px solid rgba(196,154,39,0.1);
     }
-    .product-img:hover::after {
-      opacity: 1;
+    .hero-left::after {
+      content: '';
+      position: absolute; bottom: -60px; left: -60px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      border: 1px solid rgba(196,154,39,0.07);
     }
-    .arrow-container {
-      position: fixed;
-      bottom: 20px;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 20px;
-      z-index: 9999;
-      pointer-events: auto;
-    }
-    .arrow-box {
-      width: 80px;
-      height: 80px;
-      background: rgba(0,0,0,0.8);
-      border: 5px solid #FFD700;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      box-shadow: 0 0 15px #FFD700;
-      animation: pulseGlow 4s infinite alternate;
-    }
-    .arrow-box:hover {
-      background: rgba(255,215,0,0.2);
-      transform: scale(1.15) translateY(-5px);
-      box-shadow: 0 15px 30px rgba(255,215,0,0.5);
-    }
-    .arrow {
-      font-size: 3rem;
-      color: #FFD700;
-      text-shadow: 0 0 10px #FFD700;
-    }
-    #intro-page {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 0 5vw;
-    }
-    #intro-button {
-      padding: 20px 80px;
-      font-size: 3rem;
-      background: linear-gradient(135deg, #000, #1a1a00);
-      color: #FFD700;
-      border: 6px solid #FFD700;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      box-shadow: 0 0 20px rgba(255,215,0,0.5);
-      animation: pulseGlow 5s infinite alternate;
-    }
-    #intro-button:hover {
-      background: linear-gradient(135deg, #FFD700, #ffea80);
-      color: #000;
-      transform: scale(1.08) translateY(-5px);
-      box-shadow: 0 15px 40px rgba(255,215,0,0.7);
-    }
+    .hero-tag { font-size: 0.62rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--accent2); margin-bottom: 2rem; position: relative; z-index: 1; }
+    .hero-h1  { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.2rem,5vw,5.5rem); font-weight: 300; color: #fff; line-height: 1.05; letter-spacing: 0.02em; margin-bottom: 1.8rem; position: relative; z-index: 1; }
+    .hero-h1 em { font-style: italic; color: var(--warm); }
+    .hero-p   { font-size: 0.88rem; color: rgba(255,255,255,0.45); font-weight: 300; line-height: 1.85; max-width: 360px; margin-bottom: 3rem; position: relative; z-index: 1; }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; position: relative; z-index: 1; }
+    .btn-solid { padding: 0.75rem 2rem; background: var(--accent2); color: var(--ink); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; border: none; cursor: pointer; text-decoration: none; transition: background .2s; font-weight: 500; }
+    .btn-solid:hover { background: var(--warm); }
+    .btn-ghost { padding: 0.75rem 2rem; background: transparent; color: rgba(255,255,255,0.6); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; text-decoration: none; transition: all .2s; font-weight: 300; }
+    .btn-ghost:hover { border-color: var(--accent2); color: var(--warm); }
 
-    /* Fotoğraf büyütme modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 10000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.95);
-      align-items: center;
-      justify-content: center;
-      overflow: auto;
-      backdrop-filter: blur(5px);
+    .hero-right {
+      background: var(--bg2);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
     }
-    .modal-content {
-      max-width: 90%;
-      max-height: 85vh;
-      border: 6px solid #FFD700;
-      border-radius: 20px;
-      box-shadow: 0 0 60px #FFD700, 0 0 100px rgba(255,215,0,0.5);
-      cursor: pointer;
-      animation: zoomIn 0.4s ease;
-      object-fit: contain;
+    .hero-right-inner {
+      text-align: center; padding: 4rem;
     }
-    @keyframes zoomIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .close {
-      position: absolute;
-      top: 25px;
-      right: 35px;
-      color: #FFD700;
-      font-size: 4.5rem;
-      font-weight: bold;
-      cursor: pointer;
-      text-shadow: 0 0 15px #FFD700;
-      transition: all 0.3s;
-    }
-    .close:hover {
-      color: #fff;
-      transform: rotate(90deg);
-      text-shadow: 0 0 30px #FFD700;
-    }
+    .hero-emblem { font-size: 5rem; opacity: 0.12; margin-bottom: 2rem; display: block; }
+    .hero-stats { display: flex; flex-direction: column; gap: 2rem; }
+    .hstat { border-left: 2px solid var(--border); padding-left: 1.5rem; }
+    .hstat-n { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 300; color: var(--accent); }
+    .hstat-l { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink2); opacity: 0.6; margin-top: 2px; }
 
-    /* Nabız atan altın glow animasyonu */
-    @keyframes pulseGlow {
-      0% { text-shadow: 0 0 10px #FFD700; box-shadow: 0 0 10px #FFD700; }
-      100% { text-shadow: 0 0 25px #FFD700; box-shadow: 0 0 30px #FFD700; }
-    }
+    /* ── ALTIN FİYATLARI ── */
+    .gold-sec { background: var(--ink); padding: 5rem 4rem; }
+    .sec-tag   { font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--accent2); text-align: center; margin-bottom: 0.5rem; }
+    .sec-h     { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem,3vw,2.6rem); font-weight: 300; text-align: center; letter-spacing: 0.04em; margin-bottom: 2.5rem; }
+    .gold-sec .sec-h { color: #fff; }
 
-    /* Mobil dik mod */
-    @media (max-width: 768px) {
-      .title {
-        font-size: 2.8rem;
-      }
-      .sub-title {
-        font-size: 1.1rem;
-      }
-      .welcome {
-        font-size: 1.6rem;
-      }
-      .product-img {
-        max-height: 35vh;
-      }
-      .arrow-box {
-        width: 70px;
-        height: 70px;
-      }
-      .arrow {
-        font-size: 2.8rem;
-      }
-      .product-gallery {
-        gap: 25px;
-      }
-      .modal-content {
-        max-width: 95%;
-        max-height: 80vh;
-      }
-      .close {
-        font-size: 4rem;
-        top: 20px;
-        right: 25px;
-      }
-      .instagram-logo, .custom-logo, .music-control {
-        width: 40px;
-        height: 40px;
-      }
-      .header-icons {
-        gap: 10px;
-        right: 10px;
-        top: 12px;
-      }
+    .price-meta {
+      display: flex; align-items: center; justify-content: center;
+      gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;
+    }
+    .live-pill {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: rgba(110,207,129,0.08); border: 1px solid rgba(110,207,129,0.2);
+      padding: 0.3rem 0.9rem; border-radius: 20px;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #6ecf81; animation: pulse 2s infinite; }
+    .dot.spin { background: var(--accent2); animation: pulse .5s infinite; }
+    .dot.err  { background: #e06060; animation: none; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+    .live-txt { font-size: 0.68rem; color: rgba(110,207,129,0.8); letter-spacing: 0.1em; }
+    .upd-txt  { font-size: 0.65rem; color: rgba(255,255,255,0.25); }
+    .cd-wrap  { display: flex; align-items: center; gap: 0.5rem; }
+    .cd-bar   { width: 90px; height: 2px; background: rgba(196,154,39,0.12); border-radius: 1px; overflow: hidden; }
+    .cd-prog  { height: 100%; background: var(--accent2); border-radius: 1px; transition: width 1s linear; }
+    .cd-lbl   { font-size: 0.65rem; color: rgba(196,154,39,0.4); min-width: 26px; }
+
+    .tabs { display: flex; justify-content: center; gap: 0; margin-bottom: 2rem; border: 1px solid rgba(196,154,39,0.2); max-width: 320px; margin-left: auto; margin-right: auto; }
+    .tab  { flex: 1; font-family: 'Jost', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.55rem 0; background: transparent; border: none; color: rgba(196,154,39,0.4); cursor: pointer; transition: all .2s; }
+    .tab + .tab { border-left: 1px solid rgba(196,154,39,0.2); }
+    .tab.on { background: rgba(196,154,39,0.1); color: var(--warm); }
+
+    .tbl-wrap { max-width: 860px; margin: 0 auto; }
+    table.pt { width: 100%; border-collapse: collapse; }
+    table.pt thead th { font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(196,154,39,0.3); padding: 0 0.8rem 0.8rem; text-align: right; font-weight: 400; border-bottom: 1px solid rgba(196,154,39,0.1); }
+    table.pt thead th:first-child { text-align: left; }
+    table.pt tbody tr { border-bottom: 1px solid rgba(255,255,255,0.03); transition: background .15s; }
+    table.pt tbody tr:hover { background: rgba(196,154,39,0.04); }
+    table.pt tbody tr.hi { background: rgba(196,154,39,0.06); }
+    table.pt td { padding: 1rem 0.8rem; vertical-align: middle; }
+    .rn  { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: #fff; font-weight: 400; letter-spacing: 0.02em; }
+    .rn.gold { color: var(--warm); }
+    .rs  { font-size: 0.6rem; color: rgba(255,255,255,0.22); margin-top: 2px; }
+    .rp  { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--warm); text-align: right; white-space: nowrap; font-weight: 400; }
+    .rc  { text-align: right; white-space: nowrap; }
+    .rc .pct { font-size: 0.8rem; font-weight: 500; }
+    .rc .abs { font-size: 0.62rem; color: rgba(255,255,255,0.2); display: block; margin-top: 1px; }
+    .up { color: #6ecf81; } .dn { color: #e07070; } .nu { color: rgba(255,255,255,0.2); }
+    .gold-fn { text-align: center; margin-top: 1.8rem; font-size: 0.6rem; color: rgba(255,255,255,0.18); letter-spacing: 0.05em; }
+
+    /* ── GALERİ ── */
+    .gal-sec { background: var(--bg); padding: 5rem 4rem; }
+    .gal-sec .sec-h { color: var(--ink); }
+    .gal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); max-width: 1050px; margin: 0 auto; }
+    .gi { position: relative; overflow: hidden; cursor: pointer; background: var(--bg2); aspect-ratio: 1; }
+    .gi:first-child { grid-column: span 2; aspect-ratio: 2/1; }
+    .gi img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s; }
+    .gi:hover img { transform: scale(1.06); }
+    .gi-ph { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; }
+    .gi-ph-ico { font-size: 2.8rem; opacity: 0.15; }
+    .gi:first-child .gi-ph-ico { font-size: 4.5rem; }
+    .gi-ph-txt { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink2); opacity: 0.3; font-family: 'Jost'; }
+    .gi-ov { position: absolute; inset: 0; background: rgba(28,28,28,0); display: flex; align-items: flex-end; padding: 1.2rem; transition: background .3s; }
+    .gi:hover .gi-ov { background: rgba(28,28,28,0.65); }
+    .gi-cap { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: #fff; opacity: 0; transform: translateY(8px); transition: all .3s; }
+    .gi:hover .gi-cap { opacity: 1; transform: translateY(0); }
+    .gal-hint { text-align: center; margin-top: 1.2rem; font-size: 0.68rem; color: var(--ink2); opacity: 0.45; font-style: italic; }
+
+    /* ── KATEGORİLER ── */
+    .cat-sec { background: var(--bg2); padding: 5rem 4rem; }
+    .cat-sec .sec-h { color: var(--ink); }
+    .cat-row { display: flex; overflow-x: auto; gap: 1px; max-width: 1050px; margin: 0 auto; background: var(--border); scrollbar-width: none; }
+    .cat-row::-webkit-scrollbar { display: none; }
+    .cc { flex: 0 0 180px; background: var(--white); padding: 2.2rem 1.4rem; text-align: center; cursor: pointer; transition: background .25s; }
+    .cc:hover { background: var(--ink); }
+    .cc:hover .cc-n { color: #fff; }
+    .cc:hover .cc-s { color: rgba(255,255,255,0.35); }
+    .cc-i { font-size: 1.8rem; margin-bottom: 0.8rem; display: block; }
+    .cc-n { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--ink); margin-bottom: 0.3rem; transition: color .25s; }
+    .cc-s { font-size: 0.65rem; color: var(--ink2); opacity: 0.5; transition: color .25s; }
+
+    /* ── HAKKIMIZDA ── */
+    .about-sec { background: var(--white); padding: 6rem 4rem; }
+    .about-grid { max-width: 1050px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+    .about-vis { position: relative; }
+    .about-box {
+      aspect-ratio: 4/5;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .about-box::before { content: ''; position: absolute; inset: 12px; border: 1px solid var(--border); }
+    .about-box-ico { font-size: 5rem; opacity: 0.08; }
+    .about-badge {
+      position: absolute; bottom: -18px; right: -18px;
+      width: 100px; height: 100px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .about-badge strong { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 300; line-height: 1; }
+    .about-badge small  { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.8; }
+    .about-txt .sec-tag { text-align: left; }
+    .about-txt .sec-h   { text-align: left; color: var(--ink); margin-bottom: 1.2rem; }
+    .about-p { font-size: 0.88rem; color: var(--ink2); line-height: 1.85; font-weight: 300; margin-bottom: 1rem; }
+    .about-stats { display: flex; gap: 2.5rem; padding-top: 1.8rem; border-top: 1px solid var(--border); margin-top: 0.8rem; }
+    .ast strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: var(--accent); }
+    .ast small  { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink2); opacity: 0.5; }
+
+    /* ── HİZMETLER ── */
+    .svc-sec { background: var(--bg); padding: 5rem 4rem; }
+    .svc-sec .sec-h { color: var(--ink); }
+    .svc-grid { display: grid; grid-template-columns: repeat(3,1fr); max-width: 1050px; margin: 0 auto; border-top: 1px solid var(--border); border-left: 1px solid var(--border); }
+    .si { padding: 2.2rem 1.8rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); transition: background .25s; }
+    .si:hover { background: var(--ink); }
+    .si:hover .si-t { color: var(--warm); }
+    .si:hover .si-d { color: rgba(255,255,255,0.4); }
+    .si-n { font-size: 0.58rem; letter-spacing: 0.3em; color: var(--accent2); font-weight: 500; margin-bottom: 0.8rem; }
+    .si-t { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--ink); margin-bottom: 0.5rem; transition: color .25s; }
+    .si-d { font-size: 0.8rem; line-height: 1.7; color: var(--ink2); opacity: 0.7; transition: color .25s; }
+
+    /* ── İLETİŞİM ── */
+    .con-sec { background: var(--ink); padding: 5rem 4rem; }
+    .con-sec .sec-h { color: #fff; }
+    .con-cards { display: flex; justify-content: center; gap: 1px; flex-wrap: wrap; max-width: 800px; margin: 0 auto 3rem; background: rgba(196,154,39,0.12); }
+    .con-c { flex: 1; min-width: 200px; background: var(--ink); padding: 2rem; text-align: center; transition: background .2s; }
+    .con-c:hover { background: rgba(196,154,39,0.05); }
+    .con-ic  { font-size: 1.4rem; margin-bottom: 0.8rem; }
+    .con-lb  { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.5rem; }
+    .con-vl  { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: rgba(255,255,255,0.6); line-height: 1.6; font-weight: 300; }
+    .map-ph  { max-width: 800px; margin: 0 auto; height: 220px; border: 1px solid rgba(196,154,39,0.15); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.5rem; color: rgba(255,255,255,0.12); font-size: 0.72rem; letter-spacing: 0.2em; }
+    .map-ph span { font-size: 2rem; opacity: 0.12; }
+
+    /* ── FOOTER ── */
+    footer { background: #111; border-top: 1px solid rgba(196,154,39,0.1); padding: 2rem 4rem; }
+    .foot-in { max-width: 1050px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .foot-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300; color: var(--warm); letter-spacing: 0.08em; }
+    .foot-logo span { display: block; font-size: 0.58rem; color: rgba(255,255,255,0.2); letter-spacing: 0.25em; text-transform: uppercase; margin-top: 2px; font-family: 'Jost'; }
+    .foot-copy { font-size: 0.62rem; color: rgba(255,255,255,0.18); text-align: right; }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 5rem 2rem; }
+      .gold-sec, .gal-sec, .cat-sec, .about-sec, .svc-sec, .con-sec { padding: 4rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .svc-grid { grid-template-columns: 1fr 1fr; }
+      .gal-grid { grid-template-columns: 1fr 1fr; }
+      .gi:first-child { grid-column: span 2; }
+      table.pt thead { display: none; }
+      table.pt td { display: block; text-align: left !important; padding: 0.2rem 0.5rem; }
+      table.pt tr { display: block; border-bottom: 1px solid rgba(196,154,39,0.1); padding: 0.6rem 0; }
+      footer { padding: 1.5rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dot { animation: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Altın partikül arka plan -->
-  <canvas id="particles-js"></canvas>
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <span class="logo-main">Enka Kuyumculuk</span>
+    <span class="logo-sub">Çemberlitaş · İstanbul</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#altin">Altın Fiyatları</a></li>
+    <li><a href="#galeri">Galeri</a></li>
+    <li><a href="#koleksiyon">Koleksiyon</a></li>
+    <li><a href="#hakkimizda">Hakkımızda</a></li>
+    <li><a href="#iletisim">İletişim</a></li>
+  </ul>
+</nav>
 
-  <div class="founder">
-    Founder
-    <div class="founder-sub">Faruk Can Asker</div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Çemberlitaş · İstanbul</p>
+    <h1 class="hero-h1">Altının<br><em>Gerçek</em><br>Adresi</h1>
+    <p class="hero-p">Tarihin kalbinde, Yerebatan Sarnıcı'nın karşısında — ustalıkla işlenmiş altın ve mücevherat.</p>
+    <div class="hero-cta">
+      <a href="#altin" class="btn-solid">Güncel Fiyatlar</a>
+      <a href="#galeri" class="btn-ghost">Koleksiyonu Gör</a>
+    </div>
   </div>
-
-  <!-- Sağ üst ikonlar -->
-  <div class="header-icons">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1024px-Instagram_icon.png" alt="Instagram" class="instagram-logo" onclick="window.open('https://www.instagram.com/enka_kuyumculuk/', '_blank')">
-    <img src="https://i.imgur.com/KvzGKxo.png" alt="ENKA Logo" class="custom-logo" onclick="openLogoModal()">
+  <div class="hero-right">
+    <div class="hero-right-inner">
+      <span class="hero-emblem">◈</span>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-n">25+</div><div class="hstat-l">Yıl Deneyim</div></div>
+        <div class="hstat"><div class="hstat-n">%100</div><div class="hstat-l">Sertifikalı Altın</div></div>
+        <div class="hstat"><div class="hstat-n">Çemberlitaş</div><div class="hstat-l">Yerebatan Sarnıcı Karşısı</div></div>
+      </div>
+    </div>
   </div>
+</section>
 
-  <!-- Giriş sayfası -->
-  <div id="intro-page" class="page active">
-    <button id="intro-button">GİRİŞ</button>
-  </div>
+<!-- ALTIN FİYATLARI -->
+<section class="gold-sec" id="altin">
+  <p class="sec-tag">Canlı Piyasa</p>
+  <h2 class="sec-h">Altın & Gümüş Fiyatları</h2>
 
-  <!-- Sayfa 1: Hoşgeldiniz -->
-  <div id="page1" class="page">
-    <div class="title">ENKA</div>
-    <div class="sub-title">kuyumculuk</div>
-    <div class="welcome">HOŞGELDİNİZ</div>
-  </div>
-
-  <!-- Sayfa 2: Pullu Zincir -->
-  <div id="page2" class="page">
-    <div class="title">Pullu Zincir</div>
-    <div class="sub-title">Altın pullu zincir modelleri</div>
-    <div class="product-gallery">
-      <img src="https://i.imgur.com/PHUKcgC.png" alt="Zincir 1" class="product-img" onclick="openModal(this.src)">
-      <img src="https://i.imgur.com/8vUboG3.png" alt="Zincir 2" class="product-img" onclick="openModal(this.src)">
-      <img src="https://i.imgur.com/ycqXYHy.png" alt="Zincir 3" class="product-img" onclick="openModal(this.src)">
+  <div class="price-meta">
+    <div class="live-pill">
+      <span class="dot spin" id="dot"></span>
+      <span class="live-txt" id="stxt">Bağlanıyor…</span>
+    </div>
+    <span class="upd-txt" id="utime"></span>
+    <div class="cd-wrap">
+      <div class="cd-bar"><div class="cd-prog" id="cdp" style="width:100%"></div></div>
+      <span class="cd-lbl" id="cdn">60s</span>
     </div>
   </div>
 
-  <!-- Sayfa 3: Pullu Bileklik -->
-  <div id="page3" class="page">
-    <div class="title">Pullu Bileklik</div>
-    <div class="sub-title">Altın pullu bileklik modelleri</div>
-    <div class="product-gallery">
-      <img src="https://i.imgur.com/B1W7QdF.png" alt="Bileklik 1" class="product-img" onclick="openModal(this.src)">
-      <img src="https://i.imgur.com/j8zGzpc.png" alt="Bileklik 2" class="product-img" onclick="openModal(this.src)">
-      <img src="https://i.imgur.com/cReTEWw.png" alt="Bileklik 3" class="product-img" onclick="openModal(this.src)">
+  <div class="tabs" style="margin-bottom:2rem">
+    <button class="tab on" onclick="switchTab('altin',this)">Altın</button>
+    <button class="tab" onclick="switchTab('gumus',this)">Gümüş</button>
+    <button class="tab" onclick="switchTab('doviz',this)">Döviz</button>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="pt">
+      <thead>
+        <tr>
+          <th style="text-align:left">Ürün</th>
+          <th>Alış (₺)</th>
+          <th>Satış (₺)</th>
+          <th>Değişim</th>
+          <th>Fark (₺)</th>
+        </tr>
+      </thead>
+      <tbody id="pbody">
+        <tr><td colspan="5" style="text-align:center;padding:3rem;color:rgba(196,154,39,0.25);letter-spacing:0.2em;font-size:0.8rem">Fiyatlar yükleniyor…</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="gold-fn">★ Fiyatlar bilgi amaçlıdır, her 60 saniyede otomatik güncellenir. Kesin fiyat için mağazamızı ziyaret ediniz.</p>
+</section>
+
+<!-- GALERİ -->
+<section class="gal-sec" id="galeri">
+  <p class="sec-tag">Vitrinimizden</p>
+  <h2 class="sec-h">Seçilmiş Eserler</h2>
+  <div class="gal-grid">
+    <div class="gi" id="g0">
+      <div class="gi-ph"><span class="gi-ph-ico">💍</span><span class="gi-ph-txt">Fotoğraf Bekleniyor</span></div>
+      <div class="gi-ov"><span class="gi-cap">Altın Kolye</span></div>
+    </div>
+    <div class="gi" id="g1">
+      <div class="gi-ph"><span class="gi-ph-ico">📿</span><span class="gi-ph-txt">Fotoğraf Bekleniyor</span></div>
+      <div class="gi-ov"><span class="gi-cap">El İşi Kolye</span></div>
+    </div>
+    <div class="gi" id="g2">
+      <div class="gi-ph"><span class="gi-ph-ico">✨</span><span class="gi-ph-txt">Fotoğraf Bekleniyor</span></div>
+      <div class="gi-ov"><span class="gi-cap">Altın Bilezik</span></div>
+    </div>
+    <div class="gi" id="g3">
+      <div class="gi-ph"><span class="gi-ph-ico">👑</span><span class="gi-ph-txt">Fotoğraf Bekleniyor</span></div>
+      <div class="gi-ov"><span class="gi-cap">Özel Tasarım Set</span></div>
+    </div>
+    <div class="gi" id="g4">
+      <div class="gi-ph"><span class="gi-ph-ico">⭐</span><span class="gi-ph-txt">Fotoğraf Bekleniyor</span></div>
+      <div class="gi-ov"><span class="gi-cap">Pırlanta Küpe</span></div>
     </div>
   </div>
+  <p class="gal-hint">Fotoğraflarınızı ilettiğinizde bu alan güncellenecektir.</p>
+</section>
 
-  <!-- Sayfa 4: Küpeler -->
-  <div id="page4" class="page">
-    <div class="title">Küpeler</div>
-    <div class="sub-title">Altın küpe modelleri</div>
-    <div class="product-gallery">
-      <img src="https://i.imgur.com/is1dFof.png" alt="Küpe 1" class="product-img" onclick="openModal(this.src)">
-      <img src="https://i.imgur.com/ECQbMMI.png" alt="Küpe 2" class="product-img" onclick="openModal(this.src)">
-      <img src="https://i.imgur.com/eZYFQdU.png" alt="Küpe 3" class="product-img" onclick="openModal(this.src)">
+<!-- KATEGORİLER -->
+<section class="cat-sec" id="koleksiyon">
+  <p class="sec-tag">Koleksiyonlarımız</p>
+  <h2 class="sec-h">Ne Arıyorsunuz?</h2>
+  <div class="cat-row">
+    <div class="cc"><span class="cc-i">📿</span><div class="cc-n">Kolyeler</div><div class="cc-s">El işi zincir & uçlar</div></div>
+    <div class="cc"><span class="cc-i">✨</span><div class="cc-n">Bilezikler</div><div class="cc-s">Klasik & modern</div></div>
+    <div class="cc"><span class="cc-i">👂</span><div class="cc-n">Küpeler</div><div class="cc-s">Sade & taşlı</div></div>
+    <div class="cc"><span class="cc-i">🏅</span><div class="cc-n">Has Altın</div><div class="cc-s">Gram & külçe</div></div>
+    <div class="cc"><span class="cc-i">🥈</span><div class="cc-n">Gümüş</div><div class="cc-s">Takı & külçe</div></div>
+  </div>
+</section>
+
+<!-- HAKKIMIZDA -->
+<section class="about-sec" id="hakkimizda">
+  <div class="about-grid">
+    <div class="about-vis">
+      <div class="about-box">
+        <span class="about-box-ico">◈</span>
+      </div>
+      <div class="about-badge">
+        <strong>25+</strong><small>Yıl</small>
+      </div>
+    </div>
+    <div class="about-txt">
+      <p class="sec-tag">Hakkımızda</p>
+      <h2 class="sec-h">İstanbul'un Kalbinde<br>Güvenilir Bir İsim</h2>
+      <p class="about-p">Çemberlitaş'ta, Yerebatan Sarnıcı'nın hemen karşısında hizmet veren Enka Kuyumculuk, 25 yılı aşkın deneyimiyle müşterilerine özgün ve kaliteli mücevher deneyimi sunmaktadır.</p>
+      <p class="about-p">Her ürünümüz sertifikalı ayarında, usta ellerden çıkmadır. Müşteri güveni ve memnuniyeti değişmeyen önceliğimizdir.</p>
+      <div class="about-stats">
+        <div class="ast"><strong>25+</strong><small>Yıl Deneyim</small></div>
+        <div class="ast"><strong>%100</strong><small>Sertifikalı</small></div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- Sayfa 5: Farklı Pullu Modelleri -->
-  <div id="page5" class="page">
-    <div class="title">Farklı Pullu Modelleri</div>
-    <div class="sub-title">Özel pullu takı modelleri</div>
-    <div class="product-gallery">
-      <img src="https://i.imgur.com/feQEkBz.png" alt="Pullu Model 1" class="product-img" onclick="openModal(this.src)">
-      <img src="https://i.imgur.com/kr2yH3z.png" alt="Pullu Model 2" class="product-img" onclick="openModal(this.src)">
-      <img src="https://i.imgur.com/hhV24pN.png" alt="Pullu Model 3" class="product-img" onclick="openModal(this.src)">
+<!-- HİZMETLER -->
+<section class="svc-sec" id="hizmetler">
+  <p class="sec-tag">Hizmetlerimiz</p>
+  <h2 class="sec-h">Size Nasıl Yardımcı Olabiliriz?</h2>
+  <div class="svc-grid">
+    <div class="si"><div class="si-n">01</div><div class="si-t">Özel Tasarım</div><div class="si-d">Hayalinizdeki mücevheri birlikte tasarlıyoruz. Kişiye özel, tek örnek üretim.</div></div>
+    <div class="si"><div class="si-n">02</div><div class="si-t">Tamir & Onarım</div><div class="si-d">Eski ve kırık mücevherlerinizi ustalıkla yeniden hayata döndürüyoruz.</div></div>
+    <div class="si"><div class="si-n">03</div><div class="si-t">Değerleme</div><div class="si-d">Altın ve mücevherleriniz için güncel piyasaya göre ücretsiz değerleme.</div></div>
+    <div class="si"><div class="si-n">04</div><div class="si-t">Alım & Satım</div><div class="si-d">Şeffaf ve güncel fiyatlarla altın, gümüş ve mücevher alım satımı.</div></div>
+    <div class="si"><div class="si-n">05</div><div class="si-t">Hediye Paketi</div><div class="si-d">Sevdiklerinize özel zarif kutulama ve kişisel mesaj kartı hizmeti.</div></div>
+    <div class="si"><div class="si-n">06</div><div class="si-t">Boy & Ayar</div><div class="si-d">Bilezik boy ayarı, zincir uzatma–kısaltma ve klaspec işlemleri.</div></div>
+  </div>
+</section>
+
+<!-- İLETİŞİM -->
+<section class="con-sec" id="iletisim">
+  <p class="sec-tag">Bize Ulaşın</p>
+  <h2 class="sec-h">Sizi Bekliyoruz</h2>
+  <div class="con-cards">
+    <div class="con-c">
+      <div class="con-ic">📍</div>
+      <div class="con-lb">Adres</div>
+      <div class="con-vl">Yerebatan Sarnıcı Karşısı<br>Çemberlitaş, Fatih / İstanbul</div>
+    </div>
+    <div class="con-c">
+      <div class="con-ic">🕐</div>
+      <div class="con-lb">Çalışma Saatleri</div>
+      <div class="con-vl">Pazartesi – Cumartesi<br>09:00 – 19:00<br><span style="font-size:0.82rem;color:rgba(255,255,255,0.25)">Pazar: Kapalı</span></div>
     </div>
   </div>
+  <div class="map-ph"><span>📍</span>Yerebatan Sarnıcı Karşısı · Çemberlitaş · İstanbul</div>
+</section>
 
-  <!-- Oklar -->
-  <div class="arrow-container">
-    <div id="prev-arrow" class="arrow-box"><div class="arrow">←</div></div>
-    <div id="next-arrow" class="arrow-box"><div class="arrow">→</div></div>
+<!-- FOOTER -->
+<footer>
+  <div class="foot-in">
+    <div class="foot-logo">Enka Kuyumculuk<span>Çemberlitaş · İstanbul</span></div>
+    <div class="foot-copy">© 2025 Enka Kuyumculuk<br>Tüm hakları saklıdır.</div>
   </div>
+</footer>
 
-  <!-- Fotoğraf büyütme modal -->
-  <div id="modal" class="modal" onclick="closeModal()">
-    <span class="close" onclick="closeModal()">×</span>
-    <img class="modal-content" id="modalImg">
-  </div>
+<script>
+const TROY = 31.1035;
 
-  <!-- Logo tıklayınca çıkan özel modal -->
-  <div id="logoModal" class="modal" onclick="closeLogoModal()">
-    <span class="close" onclick="closeLogoModal()">×</span>
-    <img class="modal-content" id="logoModalImg" src="https://i.imgur.com/O9LR3Gj.png">
-  </div>
+const TABS = {
+  altin: [
+    { icon:'🥇', name:'Has Altın',      sub:'24 Ayar · Gram',       key:'au24', hi:true  },
+    { icon:'💛', name:'22 Ayar',         sub:'Bilezik / Kolye · gr', key:'au22', hi:false },
+    { icon:'💛', name:'18 Ayar',         sub:'Mücevher · gr',        key:'au18', hi:false },
+    { icon:'💛', name:'14 Ayar',         sub:'Küpe / Takı · gr',     key:'au14', hi:false },
+  ],
+  gumus: [
+    { icon:'🥈', name:'Has Gümüş',       sub:'999 · Gram',           key:'ag999',hi:true  },
+    { icon:'🥈', name:'925 Ayar Gümüş',  sub:'Sterlin · Gram',       key:'ag925',hi:false },
+    { icon:'🥈', name:'Gümüş Bilezik',   sub:'~12 gram / adet',      key:'agbil',hi:false },
+  ],
+  doviz: [
+    { icon:'💵', name:'Amerikan Doları', sub:'USD / TRY',             key:'usd',  hi:true  },
+    { icon:'💶', name:'Euro',            sub:'EUR / TRY',             key:'eur',  hi:false },
+    { icon:'💷', name:'İngiliz Sterlini',sub:'GBP / TRY',             key:'gbp',  hi:false },
+  ]
+};
 
-  <!-- Particles.js kütüphanesi (altın partikül için) -->
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <script>
-    particlesJS("particles-js", {
-      "particles": {
-        "number": {
-          "value": 40,
-          "density": { "enable": true, "value_area": 800 }
-        },
-        "color": { "value": "#FFD700" },
-        "shape": { "type": "circle" },
-        "opacity": {
-          "value": 0.4,
-          "random": true,
-          "anim": { "enable": true, "speed": 1, "opacity_min": 0.1 }
-        },
-        "size": {
-          "value": 3,
-          "random": true,
-          "anim": { "enable": false }
-        },
-        "line_linked": {
-          "enable": false
-        },
-        "move": {
-          "enable": true,
-          "speed": 0.8,
-          "direction": "none",
-          "random": true,
-          "straight": false,
-          "out_mode": "out",
-          "bounce": false,
-          "attract": { "enable": false }
-        }
-      },
-      "interactivity": {
-        "detect_on": "canvas",
-        "events": {
-          "onhover": { "enable": false },
-          "onclick": { "enable": false },
-          "resize": true
-        }
-      },
-      "retina_detect": true
-    });
-  </script>
+let activeTab = 'altin';
+let cur = {}, prev = {};
+let cdSec = 60, cdTimer = null;
+const $  = id => document.getElementById(id);
 
-  <script>
-    const introPage = document.getElementById('intro-page');
-    const page1 = document.getElementById('page1');
-    const page2 = document.getElementById('page2');
-    const page3 = document.getElementById('page3');
-    const page4 = document.getElementById('page4');
-    const page5 = document.getElementById('page5');
+function fmt(v) {
+  if (!v || isNaN(v)) return '—';
+  return v.toLocaleString('tr-TR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+}
 
-    const introButton = document.getElementById('intro-button');
-    const prevArrow = document.getElementById('prev-arrow');
-    const nextArrow = document.getElementById('next-arrow');
+function setStatus(state, txt) {
+  $('dot').className = 'dot ' + state;
+  $('stxt').textContent = txt;
+  $('stxt').style.color = state === 'err' ? '#e06060' : '';
+}
 
-    let currentPage = introPage;
+function startCD() {
+  cdSec = 60;
+  if (cdTimer) clearInterval(cdTimer);
+  cdTimer = setInterval(() => {
+    cdSec--;
+    $('cdn').textContent = cdSec + 's';
+    $('cdp').style.width = (cdSec / 60 * 100) + '%';
+    if (cdSec <= 0) { clearInterval(cdTimer); fetchPrices(); }
+  }, 1000);
+}
 
-    function showPage(targetPage) {
-      if (currentPage === targetPage) return;
-      currentPage.style.display = 'none';
-      targetPage.style.display = 'flex';
-      currentPage = targetPage;
+async function fetchPrices() {
+  setStatus('spin', 'Güncelleniyor…');
+  try {
+    const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=TRY,EUR,GBP');
+    let usdTry = 38.5, eurTry = 41.8, gbpTry = 49.2;
+    if (fxRes.ok) {
+      const fx = await fxRes.json();
+      usdTry = fx.rates?.TRY ?? usdTry;
+      eurTry = usdTry / (fx.rates?.EUR ?? 0.92);
+      gbpTry = usdTry / (fx.rates?.GBP ?? 0.79);
     }
 
-    introButton.addEventListener('click', () => showPage(page1));
+    let goldOz = 3320, silverOz = 33.5;
+    try {
+      const mRes = await fetch('https://api.metals.live/v1/spot/gold,silver');
+      if (mRes.ok) {
+        const m = await mRes.json();
+        goldOz   = m.gold   ?? goldOz;
+        silverOz = m.silver ?? silverOz;
+      }
+    } catch(_){}
 
-    nextArrow.addEventListener('click', () => {
-      if (currentPage === introPage) showPage(page1);
-      else if (currentPage === page1) showPage(page2);
-      else if (currentPage === page2) showPage(page3);
-      else if (currentPage === page3) showPage(page4);
-      else if (currentPage === page4) showPage(page5);
-    });
+    const gG = (goldOz   / TROY) * usdTry;
+    const gS = (silverOz / TROY) * usdTry;
+    const B = 0.992, S = 1.008;
 
-    prevArrow.addEventListener('click', () => {
-      if (currentPage === page5) showPage(page4);
-      else if (currentPage === page4) showPage(page3);
-      else if (currentPage === page3) showPage(page2);
-      else if (currentPage === page2) showPage(page1);
-      else if (currentPage === page1) showPage(introPage);
-    });
+    prev = { ...cur };
+    cur = {
+      au24:  { buy:gG*B,          sell:gG*S          },
+      au22:  { buy:gG*(22/24)*B,  sell:gG*(22/24)*S  },
+      au18:  { buy:gG*(18/24)*B,  sell:gG*(18/24)*S  },
+      au14:  { buy:gG*(14/24)*B,  sell:gG*(14/24)*S  },
+      ag999: { buy:gS*B,          sell:gS*S          },
+      ag925: { buy:gS*0.925*B,    sell:gS*0.925*S    },
+      agbil: { buy:gS*12*B,       sell:gS*12*S       },
+      usd:   { buy:usdTry*B,      sell:usdTry*S      },
+      eur:   { buy:eurTry*B,      sell:eurTry*S      },
+      gbp:   { buy:gbpTry*B,      sell:gbpTry*S      },
+    };
 
-    function openModal(src) {
-      const modal = document.getElementById('modal');
-      const modalImg = document.getElementById('modalImg');
-      modalImg.src = src;
-      modal.style.display = 'flex';
-    }
+    const t = new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    $('utime').textContent = 'Son güncelleme: ' + t;
+    setStatus('', 'Canlı');
+    renderTable();
+    startCD();
+  } catch(e) {
+    setStatus('err', 'Bağlantı hatası');
+    $('cdn').textContent = '—';
+  }
+}
 
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-    }
+function renderTable() {
+  const rows = TABS[activeTab];
+  $('pbody').innerHTML = rows.map(r => {
+    const c = cur[r.key], p = prev[r.key];
+    if (!c) return '';
+    const sell = c.sell, buy = c.buy;
+    const chgAbs = p ? sell - p.sell : 0;
+    const chgPct = p ? chgAbs / p.sell * 100 : 0;
+    let cls = 'nu', arrow = '—';
+    if (chgAbs >  0.001) { cls = 'up'; arrow = '▲'; }
+    if (chgAbs < -0.001) { cls = 'dn'; arrow = '▼'; }
+    return `<tr class="${r.hi?'hi':''}">
+      <td>
+        <span style="margin-right:0.6rem">${r.icon}</span>
+        <span class="rn ${r.hi?'gold':''}">${r.name}</span>
+        <div class="rs" style="padding-left:1.6rem">${r.sub}</div>
+      </td>
+      <td class="rp">${fmt(buy)}</td>
+      <td class="rp">${fmt(sell)}</td>
+      <td class="rc"><span class="pct ${cls}">${arrow} ${Math.abs(chgPct).toFixed(2)}%</span></td>
+      <td class="rc"><span class="abs ${cls}">${chgAbs>=0?'+':''}${fmt(chgAbs)} ₺</span></td>
+    </tr>`;
+  }).join('');
+}
 
-    function openLogoModal() {
-      document.getElementById('logoModal').style.display = 'flex';
-    }
+function switchTab(tab, el) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  if (Object.keys(cur).length) renderTable();
+}
 
-    function closeLogoModal() {
-      document.getElementById('logoModal').style.display = 'none';
-    }
-  </script>
+fetchPrices();
+</script>
 </body>
 </html>
